@@ -57,3 +57,36 @@ def update_view(request, code_id):
         return redirect("/code_feed/")
     else:
         return HttpResponseNotAllowed(["GET", "POST"])
+
+    @csrf_exempt
+def delete(request, code_id):
+    if request.method == "POST":
+        code = get_object_or_404(CodeModel, id=code_id)
+        if request.user == code.user:
+            code.delete()
+            return redirect("/code_feed/")
+        else:
+            return HttpResponse("You are not allowed to delete this content.", status=403)
+    else:
+        return HttpResponse("invalid request method.", status=405)
+
+
+def press_like(request, code_id):
+    if request.method == "POST":
+        code = get_object_or_404(CodeModel, id=code_id)
+        if request.user in code.likes:
+            code.likes.remove(request.user, code_id)
+        else:
+            code.likes.add(request.user, code_id)
+    else:
+        return HttpResponse("invalid request method.", status=405)
+
+def bookmark(request, code_id):
+    if request.method == "POST":
+        code = get_object_or_404(CodeModel, id=code_id)
+        if request.user in code.bookmark:
+            code.bookmarks.remove(request.user, code_id)
+        else:
+            code.bookmarks.add(request.user, code_id)
+    else:
+        return HttpResponse("invalid request method.", status=405)
