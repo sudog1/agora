@@ -6,6 +6,7 @@ class ProblemModel(models.Model):
     number = models.IntegerField(default=0)
     level = models.IntegerField(default=0)
     title = models.CharField(max_length=128)
+    link = models.TextField()
     # (problem) N:N (user)
     solved = models.ManyToManyField(
         UserModel, through="CodeModel", related_name="solved", blank=True
