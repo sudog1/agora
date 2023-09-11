@@ -22,11 +22,14 @@
     <!-- {% endif %} -->
 </nav>
 <body>
+    <a href="/code_feed/update/1">업데이트</a>
         <ul>
             {% for feed in feeds %}
                 <li>
                     <div>{{ feed.problem }}</div>
+                    <pre>
                     <div>{{ feed.content }}</div>
+                    </pre>
                     <div>{{ feed.description }}</div>
                     <div>{{ feed.author }}</div>
                 </li>

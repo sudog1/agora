@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>codefeed 게시글 만들기</h1>
-    <form action="/code_feed/create/" method="post">
+    <form action="/code_feed/update/1/" method="post">
         {% csrf_token %}
         <input type="number" max="100" min="1" name="problem" id="problem">
         <input type="text" name="content" id="content">
