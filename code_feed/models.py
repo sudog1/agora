@@ -12,7 +12,7 @@ class ProblemModel(models.Model):
 
 class CodeModel(models.Model):
     content = models.TextField(null=False, blank=False)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     author = models.ForeignKey(
