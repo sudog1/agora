@@ -7,30 +7,30 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+
 def index(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         feeds = CodeModel.objects.all()
         context = {
-            'feeds' : feeds,
+            "feeds": feeds,
         }
-        return render(request, 'code_feed/index.html', context)
+        return render(request, "code_feed/index.html", context)
     else:
         return HttpResponse("invalid request method.", status=405)
 
 
 @login_required
-@csrf_exempt
 def create(request):
-    if request.method == 'GET':
-        return render(request, 'code_feed/create.html')
-    elif request.method == 'POST':
+    if request.method == "GET":
+        return render(request, "code_feed/create.html")
+    elif request.method == "POST":
         CodeModel.objects.create(
             # problem=request.POST['problem'],
-            content=request.POST['content'], 
-            description=request.POST['description'],
+            content=request.POST["content"],
+            description=request.POST["description"],
             author=request.user,
         )
-        return redirect('/code_feed/')
+        return redirect("/code_feed/")
     else:
         return HttpResponse("invalid request method.", status=405)
 
@@ -58,7 +58,7 @@ def update_view(request, code_id):
     else:
         return HttpResponseNotAllowed(["GET", "POST"])
 
-    @csrf_exempt
+@csrf_exempt
 def delete(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
@@ -90,3 +90,20 @@ def bookmark(request, code_id):
             code.bookmarks.add(request.user, code_id)
     else:
         return HttpResponse("invalid request method.", status=405)
+
+# @login_required
+def problems_view(request):
+    if request.method == "GET":
+        problems = ProblemModel.objects.values_list("number", "title", "link", "level")
+        color_types = [
+            "",
+            "table-default",
+            "table-primary",
+            "table-success",
+            "table-warning",
+            "table-danger",
+        ]
+        problems = map(lambda x: (x[0], x[1], x[2], x[3], color_types[x[3]]), problems)
+        return render(request, "code_feed/problems.html", {"problems": problems})
+    else:
+        return HttpResponseNotAllowed(["GET"])
