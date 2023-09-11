@@ -7,7 +7,9 @@ class ProblemModel(models.Model):
     level = models.IntegerField(default=0)
     title = models.CharField(max_length=128)
     # (problem) N:N (user)
-    solved = models.ManyToManyField(UserModel, related_name="solved", blank=True)
+    solved = models.ManyToManyField(
+        UserModel, through="CodeModel", related_name="solved", blank=True
+    )
 
 
 class CodeModel(models.Model):
