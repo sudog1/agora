@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -127,3 +128,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.UserModel"
+
+# 미디어 파일을 관리할 루트 media 디렉터리
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# 각 media file에 대한 URL prefix
+MEDIA_URL = '/media/'
