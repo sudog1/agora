@@ -22,6 +22,8 @@
     {% endif %}
 </nav>
 <body>
+    <a href="{% url 'code_feed:insert' %}">문제 업로드</a>
+    <a href="{% url 'code_feed:problems' %}">문제 리스트 보러가기</a>
     <a href="/code_feed/update/1">업데이트</a>
         <ul>
             {% for feed in feeds %}

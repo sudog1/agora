@@ -4,6 +4,7 @@ from code_feed.models import ProblemModel, CodeModel, CommentModel
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+import csv
 
 # Create your views here.
 
@@ -94,6 +95,26 @@ def bookmark(request, code_id):
             return redirect("/code_feed/")
     else:
         return HttpResponse("invalid request method.", status=405)
+
+def insert_problems_view(request):
+    if request.method == "GET":
+        csv_file_path = "problem_list.csv"
+        with open(csv_file_path, "r", encoding="utf-8") as csv_file:
+            csv_rows = csv.reader(csv_file)
+            next(csv_rows)
+            for number, title, link, level in csv_rows:
+                if ProblemModel.objects.filter(number=number).exists():
+                    break
+                ProblemModel.objects.create(
+                    number=int(number),
+                    title=title,
+                    link=link,
+                    level=int(level),
+                )
+        return redirect(reverse("code_feed:problems"))
+    else:
+        return HttpResponseNotAllowed(["GET"])
+
 
 # @login_required
 def problems_view(request):
