@@ -6,32 +6,38 @@
     <title>Document</title>
 </head>
 <nav>
-    <!-- {% if request.user.is_authenticated %}
-    <div>{{ request.user.username }}</div> -->
-    <!-- <form action="/user/logout/" method="post"> -->
-        <!-- {% csrf_token %} -->
+    {% if request.user.is_authenticated %}
+    <div>{{ request.user.username }}</div>
+    <form action="/user/logout/" method="post">
+        {% csrf_token %}
         <button>로그아웃</button>
-    <!-- </form> -->
-    <!-- {% else %} -->
+    </form>
+    {% else %}
     <div>
-        <!-- <a href="/accounts/login/">로그인</a>
-        <a href="/accounts/signup/">회원가입</a> -->
+        <a href="/accounts/login/">로그인</a>
+        <a href="/accounts/signup/">회원가입</a>
         <button>로그인</button>
         <button>회원가입</button>
     </div>
-    <!-- {% endif %} -->
+    {% endif %}
 </nav>
 <body>
     <a href="/code_feed/update/1">업데이트</a>
         <ul>
             {% for feed in feeds %}
                 <li>
-                    <div>{{ feed.problem }}</div>
+                    <div>문제{{ feed.problem }}</div>
                     <pre>
                     <div>{{ feed.content }}</div>
                     </pre>
                     <div>{{ feed.description }}</div>
-                    <div>{{ feed.author }}</div>
+                    <div>작성자: {{ feed.author }}</div>
+                    <div>좋아요 수: </div>
+                    <form action="/code_feed/{{ code_id }}/" method="post">
+                        {% csrf_token %}
+                        <button type="submit" formaction="/code_feed/{{ code_id }}/">좋아요</button>
+                    </form>
+                    <div>북마크: {{ feed.bookmarks }}</div>
                 </li>
             {% endfor %}
         </ul>
