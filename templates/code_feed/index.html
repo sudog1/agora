@@ -1,41 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<nav>
-    <!-- {% if request.user.is_authenticated %}
-    <div>{{ request.user.username }}</div> -->
-    <!-- <form action="/user/logout/" method="post"> -->
-        <!-- {% csrf_token %} -->
-        <button>로그아웃</button>
-    <!-- </form> -->
-    <!-- {% else %} -->
-    <div>
-        <!-- <a href="/accounts/login/">로그인</a>
-        <a href="/accounts/signup/">회원가입</a> -->
-        <button>로그인</button>
-        <button>회원가입</button>
-    </div>
-    <!-- {% endif %} -->
-</nav>
-<body>
-    <a href="{% url 'code_feed:insert' %}">문제 업로드</a>
-    <a href="{% url 'code_feed:problems' %}">문제 리스트 보러가기</a>
-    <a href="/code_feed/update/1">업데이트</a>
-        <ul>
-            {% for feed in feeds %}
-                <li>
-                    <div>{{ feed.problem }}</div>
-                    <pre>
-                    <div>{{ feed.content }}</div>
-                    </pre>
-                    <div>{{ feed.description }}</div>
-                    <div>{{ feed.author }}</div>
-                </li>
-            {% endfor %}
-        </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+Code Feed
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'code_feed:create' %}">코드 제출</a>
+    <ul>
+        {% for feed in feeds %}
+            <li>
+                <div>{{ feed.problem }}</div>
+                <pre>{{ feed.content|safe }}</pre>
+                <div>{{ feed.description }}</div>
+                <div>{{ feed.author }}</div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
