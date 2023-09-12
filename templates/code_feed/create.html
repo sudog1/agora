@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 생성 페이지입니다.</title>
+</head>
+<body>
+    <h1>codefeed 게시글 만들기</h1>
+    <form action="/code_feed/create/" method="post">
+        <input type="number" max="100" min="1" name="problem" id="problem">
+        <input type="text" name="content" id="content">
+        <input type="text" name="description" id="description">
+        <button type="submit">만들기</button>
+    </form>
+</body>
+</html>

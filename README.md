@@ -10,6 +10,7 @@
 #### - 🎨 code_app이 명확하지 않아서 code_feed로 이름을 변경했습니다.
 #### - user_app을 accounts로 변경했습니다.
 #### - 🆕 code_feed의 models.py에 likes, bookmarks, solved 관계를 추가했습니다. 주석을 읽어주세요.
+#### - 문제 데이터를 추가했습니다. `python manage.py shell < problem_list.csv` 명령을 실행해주세요.
 
 ## ⚠️ 주의사항
 ### - 🚫 models.py 수정 및 makemigrations 명령을 하지 마세요. 그렇지 않으면 충돌이 일어날 수 있습니다.

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">번호</th>
+            <th scope="col">제목</th>
+            <th scope="col">레벨</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for number, title, link, level, color in problems %}
+        <tr class="{{ color }}">
+            <th scope="row">{{ number }}</th>
+            <td><a href="{{ link }}" target="_blank">{{ title }}</a></td>
+            <td>{{ level }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
