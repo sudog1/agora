@@ -8,16 +8,58 @@
     <div class="container">
         <div class="wrap">
             <h2 class="title-center">마이페이지</h2>
-            <form class="form-area" method="post" action="/sign-up/" enctype="multipart/form-data">
+            <form class="form-area" method="post" enctype="multipart/form-data">
                 {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
-                {% csrf_token %}
-                {# <img src="{{ user.profile_image.url }}" alt="프로필 이미지"> #}
+                {% if user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" alt="프로필 이미지">
+                {% else %}
+                    <span>No Image File</span>
+                {% endif %}
+                <hr>
+                <span>{{ user.username }}</span> <br>
+                <span>email : {{ user.email }}</span> <br>
+                {% if user.github_address %}
+                    <span>github : </span>
+                    <a href="{{ user.github_address }}">{{ user.github_address }}</a>
+                {% else %}
+                    <span>No github address</span>
+                {% endif %}
                 <hr>
                 <div style="float: right">
                     <button type="submit" class="btn btn-primary">회원가입</button>
                     <a href="/sign-in" class="btn btn-secondary">로그인 페이지로</a>
                 </div>
             </form>
+            <!-- <div class="row">
+                {% for tw in code_feed %}
+                    <div class="col-md-12 mb-2">
+                        <div class="card">
+                            <div class="card-body">
+                                {% if tw.author == user %}
+                                <div style="text-align: right">
+                                    <a href="/tweet/delete/{{ tw.id }}">
+                                        <span class="badge rounded-pill bg-danger">삭제</span>
+                                    </a>
+                                </div>
+                                {% endif %}
+                                                    <div style="text-align: right">
+                                                        <a href="#">
+                                                            <span class="badge rounded-pill bg-success">보기</span>
+                                                        </a>
+                                                    </div>
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h5 class="mt-0">{{ tw.content }}</h5>
+                                    </div>
+                                    <div style="text-align: right">
+                                        <span style="font-size: small">{{ tw.author.username }}-{{ tw.created_at|timesince }} 전</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div> -->
         </div>
     </div>
 {% endblock %}

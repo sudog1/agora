@@ -1,0 +1,133 @@
+number,title,link,level
+1,짝수와 홀수,https://school.programmers.co.kr/learn/courses/30/lessons/12937,1
+2,평균 구하기,https://school.programmers.co.kr/learn/courses/30/lessons/12944,1
+3,자릿수 더하기,https://school.programmers.co.kr/learn/courses/30/lessons/12931,1
+4,약수의 합,https://school.programmers.co.kr/learn/courses/30/lessons/12928,1
+5,나머지가 1이 되는 수 찾기,https://school.programmers.co.kr/learn/courses/30/lessons/87389,1
+6,x만큼 간격이 있는 n개의 숫자,https://school.programmers.co.kr/learn/courses/30/lessons/12954,1
+7,자연수 뒤집어 배열로 만들기,https://school.programmers.co.kr/learn/courses/30/lessons/12932,1
+8,문자열을 정수로 바꾸기,https://school.programmers.co.kr/learn/courses/30/lessons/12925,1
+9,정수 제곱근 판별,https://school.programmers.co.kr/learn/courses/30/lessons/12934,1
+10,정수 내림차순으로 배치하기,https://school.programmers.co.kr/learn/courses/30/lessons/12933,1
+11,하샤드 수,https://school.programmers.co.kr/learn/courses/30/lessons/12947,1
+12,두 정수 사이의 합,https://school.programmers.co.kr/learn/courses/30/lessons/12912,1
+13,콜라츠 추측,https://school.programmers.co.kr/learn/courses/30/lessons/12943,1
+14,서울에서 김서방 찾기,https://school.programmers.co.kr/learn/courses/30/lessons/12919,1
+15,나누어 떨어지는 숫자,https://school.programmers.co.kr/learn/courses/30/lessons/12910,1
+16,음양 더하기,https://school.programmers.co.kr/learn/courses/30/lessons/76501,1
+17,핸드폰 번호 가리기,https://school.programmers.co.kr/learn/courses/30/lessons/12948,1
+18,없는 숫자 더하기,https://school.programmers.co.kr/learn/courses/30/lessons/86051,1
+19,제일 작은 수 제거하기,https://school.programmers.co.kr/learn/courses/30/lessons/12935,1
+20,가운데 글자 가져오기,https://school.programmers.co.kr/learn/courses/30/lessons/12903,1
+21,수박수박수박수박수박수?,https://school.programmers.co.kr/learn/courses/30/lessons/12922,1
+22,내적,https://school.programmers.co.kr/learn/courses/30/lessons/70128,1
+23,약수의 개수와 덧셈,https://school.programmers.co.kr/learn/courses/30/lessons/77884,1
+24,문자열 내림차순으로 배치하기,https://school.programmers.co.kr/learn/courses/30/lessons/12917,1
+25,부족한 금액 계산하기,https://school.programmers.co.kr/learn/courses/30/lessons/82612,1
+26,문자열 다루기 기본,https://school.programmers.co.kr/learn/courses/30/lessons/12918,1
+27,행렬의 덧셈,https://school.programmers.co.kr/learn/courses/30/lessons/12950,1
+28,직사각형 별찍기,https://school.programmers.co.kr/learn/courses/30/lessons/12969,1
+29,최대공약수와 최소공배수,https://school.programmers.co.kr/learn/courses/30/lessons/12940,1
+30,3진법 뒤집기,https://school.programmers.co.kr/learn/courses/30/lessons/68935,1
+31,이상한 문자 만들기,https://school.programmers.co.kr/learn/courses/30/lessons/12930,2
+32,삼총사,https://school.programmers.co.kr/learn/courses/30/lessons/131705,2
+33,크기가 작은 부분,https://school.programmers.co.kr/learn/courses/30/lessons/147355,2
+34,최소직사각형,https://school.programmers.co.kr/learn/courses/30/lessons/86491,2
+35,시저 암호,https://school.programmers.co.kr/learn/courses/30/lessons/12926,2
+36,숫자 문자열과 영단어,https://school.programmers.co.kr/learn/courses/30/lessons/81301,2
+37,문자열 내 마음대로 정렬하기,https://school.programmers.co.kr/learn/courses/30/lessons/12915,2
+38,K번째수정렬,https://school.programmers.co.kr/learn/courses/30/lessons/42748,2
+39,두 개 뽑아서 더하기,https://school.programmers.co.kr/learn/courses/30/lessons/68644,2
+40,가장 가까운 같은 글자,https://school.programmers.co.kr/learn/courses/30/lessons/142086,2
+41,푸드 파이트 대회,https://school.programmers.co.kr/learn/courses/30/lessons/134240,2
+42,콜라 문제,https://school.programmers.co.kr/learn/courses/30/lessons/132267,2
+43,명예의 전당 (1),https://school.programmers.co.kr/learn/courses/30/lessons/138477,2
+44,2016년,https://school.programmers.co.kr/learn/courses/30/lessons/12901,2
+45,카드 뭉치,https://school.programmers.co.kr/learn/courses/30/lessons/159994,2
+46,과일 장수,https://school.programmers.co.kr/learn/courses/30/lessons/135808,2
+47,모의고사완전탐색,https://school.programmers.co.kr/learn/courses/30/lessons/42840,2
+48,소수 만들기,https://school.programmers.co.kr/learn/courses/30/lessons/12977,2
+49,덧칠하기,https://school.programmers.co.kr/learn/courses/30/lessons/161989,2
+50,기사단원의 무기,https://school.programmers.co.kr/learn/courses/30/lessons/136798,2
+51,로또의 최고 순위와 최저 순위,https://school.programmers.co.kr/learn/courses/30/lessons/77484,2
+52,옹알이 (2),https://school.programmers.co.kr/learn/courses/30/lessons/133499,2
+53,숫자 짝꿍,https://school.programmers.co.kr/learn/courses/30/lessons/131128,2
+54,체육복,https://school.programmers.co.kr/learn/courses/30/lessons/42862,2
+55,문자열 나누기,https://school.programmers.co.kr/learn/courses/30/lessons/140108,3
+56,대충 만든 자판,https://school.programmers.co.kr/learn/courses/30/lessons/160586,3
+57,둘만의 암호,https://school.programmers.co.kr/learn/courses/30/lessons/155652,3
+58,햄버거 만들기,https://school.programmers.co.kr/learn/courses/30/lessons/133502,3
+59,성격 유형 검사하기,https://school.programmers.co.kr/learn/courses/30/lessons/118666,3
+60,바탕화면 정리,https://school.programmers.co.kr/learn/courses/30/lessons/161990,3
+61,개인정보 수집 유효기간,https://school.programmers.co.kr/learn/courses/30/lessons/150370,3
+62,달리기 경주,https://school.programmers.co.kr/learn/courses/30/lessons/178871,3
+63,공원 산책,https://school.programmers.co.kr/learn/courses/30/lessons/172928,3
+64,신고 결과 받기,https://school.programmers.co.kr/learn/courses/30/lessons/92334,3
+65,최댓값과 최솟값,https://school.programmers.co.kr/learn/courses/30/lessons/12939,3
+66,JadenCase 문자열 만들기,https://school.programmers.co.kr/learn/courses/30/lessons/12951,3
+67,이진 변환 반복하기,https://school.programmers.co.kr/learn/courses/30/lessons/70129,3
+68,피보나치 수,https://school.programmers.co.kr/learn/courses/30/lessons/12945,3
+69,카펫,https://school.programmers.co.kr/learn/courses/30/lessons/42842,3
+70,예상 대진표,https://school.programmers.co.kr/learn/courses/30/lessons/12985,3
+71,N개의 최소공배수,https://school.programmers.co.kr/learn/courses/30/lessons/12953,3
+72,멀리 뛰기,https://school.programmers.co.kr/learn/courses/30/lessons/12914,3
+73,귤 고르기,https://school.programmers.co.kr/learn/courses/30/lessons/138476,3
+74,괄호 회전하기,https://school.programmers.co.kr/learn/courses/30/lessons/76502,3
+75,연속 부분 수열 합의 개수,https://school.programmers.co.kr/learn/courses/30/lessons/131701,3
+76,H-Index,https://school.programmers.co.kr/learn/courses/30/lessons/42747,3
+77,n^2 배열 자르기,https://school.programmers.co.kr/learn/courses/30/lessons/87390,3
+78,행렬의 곱셈,https://school.programmers.co.kr/learn/courses/30/lessons/12949,3
+79,할인 행사,https://school.programmers.co.kr/learn/courses/30/lessons/131127,3
+80,의상,https://school.programmers.co.kr/learn/courses/30/lessons/42578,3
+81,기능개발,https://school.programmers.co.kr/learn/courses/30/lessons/42586,3
+82,프로세스,https://school.programmers.co.kr/learn/courses/30/lessons/42587,3
+83,피로도,https://school.programmers.co.kr/learn/courses/30/lessons/87946,4
+84,타겟 넘버,https://school.programmers.co.kr/learn/courses/30/lessons/43165,4
+85,k진수에서 소수 개수 구하기,https://school.programmers.co.kr/learn/courses/30/lessons/92335,4
+86,주차 요금 계산,https://school.programmers.co.kr/learn/courses/30/lessons/92341,4
+87,모음사전,https://school.programmers.co.kr/learn/courses/30/lessons/84512,4
+88,뒤에 있는 큰 수 찾기,https://school.programmers.co.kr/learn/courses/30/lessons/154539,4
+89,롤케이크 자르기,https://school.programmers.co.kr/learn/courses/30/lessons/132265,4
+90,숫자 변환하기,https://school.programmers.co.kr/learn/courses/30/lessons/154538,4
+91,2개 이하로 다른 비트,https://school.programmers.co.kr/learn/courses/30/lessons/77885,4
+92,다리를 지나는 트럭,https://school.programmers.co.kr/learn/courses/30/lessons/42583,4
+93,가장 큰 수,https://school.programmers.co.kr/learn/courses/30/lessons/42746,4
+94,소수 찾기,https://school.programmers.co.kr/learn/courses/30/lessons/42839,4
+95,쿼드압축 후 개수 세기,https://school.programmers.co.kr/learn/courses/30/lessons/68936,4
+96,택배상자,https://school.programmers.co.kr/learn/courses/30/lessons/131704,4
+97,큰 수 만들기,https://school.programmers.co.kr/learn/courses/30/lessons/42883,4
+98,삼각 달팽이,https://school.programmers.co.kr/learn/courses/30/lessons/68645,4
+99,연속된 부분 수열의 합,https://school.programmers.co.kr/learn/courses/30/lessons/178870,4
+100,두 큐 합 같게 만들기,https://school.programmers.co.kr/learn/courses/30/lessons/118667,4
+101,무인도 여행,https://school.programmers.co.kr/learn/courses/30/lessons/154540,4
+102,행렬 테두리 회전하기,https://school.programmers.co.kr/learn/courses/30/lessons/77485,4
+103,전력망을 둘로 나누기,https://school.programmers.co.kr/learn/courses/30/lessons/86971,4
+104,배달,https://school.programmers.co.kr/learn/courses/30/lessons/12978,4
+105,호텔 대실,https://school.programmers.co.kr/learn/courses/30/lessons/155651,4
+106,점 찍기,https://school.programmers.co.kr/learn/courses/30/lessons/140107,4
+107,마법의 엘리베이터,https://school.programmers.co.kr/learn/courses/30/lessons/148653,4
+108,거리두기 확인하기,https://school.programmers.co.kr/learn/courses/30/lessons/81302,4
+109,숫자 카드 나누기,https://school.programmers.co.kr/learn/courses/30/lessons/135807,4
+110,멀쩡한 사각형,https://school.programmers.co.kr/learn/courses/30/lessons/62048,4
+111,시소 짝꿍,https://school.programmers.co.kr/learn/courses/30/lessons/152996,4
+112,테이블 해시 함수,https://school.programmers.co.kr/learn/courses/30/lessons/147354,4
+113,하노이의 탑,https://school.programmers.co.kr/learn/courses/30/lessons/12946,5
+114,미로 탈출,https://school.programmers.co.kr/learn/courses/30/lessons/159993,5
+115,혼자 놀기의 달인,https://school.programmers.co.kr/learn/courses/30/lessons/131130,5
+116,광물 캐기,https://school.programmers.co.kr/learn/courses/30/lessons/172927,5
+117,리코쳇 로봇,https://school.programmers.co.kr/learn/courses/30/lessons/169199,5
+118,디펜스 게임,https://school.programmers.co.kr/learn/courses/30/lessons/142085,5
+119,우박수열 정적분,https://school.programmers.co.kr/learn/courses/30/lessons/134239,5
+120,두 원 사이의 정수 쌍,https://school.programmers.co.kr/learn/courses/30/lessons/181187,5
+121,N-Queen,https://school.programmers.co.kr/learn/courses/30/lessons/12952,5
+122,과제 진행하기,https://school.programmers.co.kr/learn/courses/30/lessons/176962,5
+123,조이스틱,https://school.programmers.co.kr/learn/courses/30/lessons/42860,5
+124,혼자서 하는 틱택토,https://school.programmers.co.kr/learn/courses/30/lessons/160585,5
+125,이모티콘 할인행사,https://school.programmers.co.kr/learn/courses/30/lessons/150368,5
+126,요격 시스템,https://school.programmers.co.kr/learn/courses/30/lessons/181188,5
+127,양궁 대회,https://school.programmers.co.kr/learn/courses/30/lessons/92342,5
+128,교점에 별 만들기,https://school.programmers.co.kr/learn/courses/30/lessons/87377,5
+129,택배 배달과 수거하기,https://school.programmers.co.kr/learn/courses/30/lessons/150369,5
+130,유사 칸토어 비트열,https://school.programmers.co.kr/learn/courses/30/lessons/148652,5
+131,당구 연습,https://school.programmers.co.kr/learn/courses/30/lessons/169198,5
+132,빛의 경로 사이클,https://school.programmers.co.kr/learn/courses/30/lessons/86052,5
