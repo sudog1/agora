@@ -11,7 +11,7 @@
             <form class="form-area" method="post" action="/sign-up/" enctype="multipart/form-data">
                 {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
                 {% csrf_token %}
-                <img src="{{ user.profile_image.url }}" alt="프로필 이미지">
+                {# <img src="{{ user.profile_image.url }}" alt="프로필 이미지"> #}
                 <hr>
                 <div style="float: right">
                     <button type="submit" class="btn btn-primary">회원가입</button>
