@@ -75,10 +75,10 @@ def press_like(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
         if request.user in code.likes:
-            code.likes.remove(request.user, code_id)
+            code.likes.remove(request.user)
             return redirect("/code_feed/")
         else:
-            code.likes.add(request.user, code_id)
+            code.likes.add(request.user)
             return redirect("/code_feed/")
     else:
         return HttpResponse("invalid request method.", status=405)
@@ -87,10 +87,10 @@ def bookmark(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
         if request.user in code.bookmark:
-            code.bookmarks.remove(request.user, code_id)
+            code.bookmarks.remove(request.user)
             return redirect("/code_feed/")
         else:
-            code.bookmarks.add(request.user, code_id)
+            code.bookmarks.add(request.user)
             return redirect("/code_feed/")
     else:
         return HttpResponse("invalid request method.", status=405)
