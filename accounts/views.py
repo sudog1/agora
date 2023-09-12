@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from .models import UserModel
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 @csrf_exempt
 def sign_up_view(request):
@@ -33,3 +35,24 @@ def mypage_view(request):
     if request.method == 'GET':
         user = request.user
         return render(request, 'accounts/mypage.html')
+
+@csrf_exempt
+def sign_in_view(request):
+    if request.method == 'POST': 
+        username = request.POST.get('username',None) 
+        password = request.POST.get('password',None) 
+
+        me = auth.authenticate(request, username=username, password=password) #=> 암호화 된 비밀번호와 사용자가 적은 비밀번호와 일치하는지 비교
+        if me is not None:
+            auth.login(request, me)
+            return redirect('/mypage/')
+        else:
+            return redirect('/sign-in')
+    elif request.method == 'GET':
+        return render(request, 'accounts/signin.html')
+
+
+@login_required
+def logout_view(request):
+    auth.logout(request)
+    return redirect('/sign-in/')

@@ -45,16 +45,16 @@
     {% endif %}
         <form class="form-inline my-2 my-lg-0">
             {% if not user.is_authenticated %} {# 유저가 로그인 되어 있지 않을 때 #}
-            <!-- <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="/sign-in"> Sign In <span class="sr-only"></span></a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="/sign-up"> Sign Up <span class="sr-only"></span></a>
                 </li>
-            </ul> -->
+            </ul>
             {% else %}
-                <!-- <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item disabled">
                         <span class="nav-link">
                             {{ user.username }} 님 반갑습니다!
@@ -63,7 +63,7 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="/logout"> 로그아웃 </a>
                     </li>
-                </ul> -->
+                </ul>
             {% endif %}
         </form>
     </div>
