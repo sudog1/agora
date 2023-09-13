@@ -1,11 +1,13 @@
 from django.urls import path
 from . import views
-from django.conf import settings
-from django.conf.urls.static import static
+
+app_name = "accounts"
 
 urlpatterns = [
-    path('sign-up/', views.sign_up, name='sign-up'),
-    path('mypage/', views.mypage_view, name='mypage'),
-    path('sign-in/', views.sign_in_view, name='sign-in' ),
-    path('logout/', views.logout_view, name='logout'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # 함수 이름들 <func_name>_view로 통일하겠습니다.
+    # 통일을 위해 sign-up, sign-in을 각각 signup, login으로 변경하였습니다.
+    path("signup/", views.signup_view, name="signup"),
+    path("mypage/", views.mypage_view, name="mypage"),
+    path("login/", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
+]
