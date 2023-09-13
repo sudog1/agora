@@ -4,6 +4,7 @@ from code_feed.models import ProblemModel, CodeModel, CommentModel
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 import csv
 
 # Create your views here.
@@ -11,7 +12,7 @@ import csv
 
 def index(request):
     if request.method == "GET":
-        feeds = CodeModel.objects.all()
+        feeds = CodeModel.objects.annotate(total_likes=Count('likes')).all()
         context = {
             "feeds": feeds,
         }
@@ -75,19 +76,18 @@ def delete(request, code_id):
 def press_like(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        if request.user in code.likes:
+        if request.user in code.likes.all():
             code.likes.remove(request.user)
-            return redirect("/code_feed/")
         else:
             code.likes.add(request.user)
-            return redirect("/code_feed/")
+        return redirect("/code_feed/")
     else:
         return HttpResponse("invalid request method.", status=405)
 
 def bookmark(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        if request.user in code.bookmark:
+        if request.user in code.bookmarks.all():
             code.bookmarks.remove(request.user)
             return redirect("/code_feed/")
         else:

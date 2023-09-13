@@ -34,12 +34,15 @@
                     </pre>
                     <div>{{ feed.description }}</div>
                     <div>작성자: {{ feed.author }}</div>
-                    <div>좋아요 수: </div>
-                    <form action="/code_feed/{{ code_id }}/" method="post">
+                    <div>좋아요 수: {{ feed.total_likes }}</div>
+                    <form action="/code_feed/likes/{{ feed.id }}/" method="post">
                         {% csrf_token %}
-                        <button type="submit" formaction="/code_feed/{{ code_id }}/">좋아요</button>
+                        <button type="submit">좋아요</button>
                     </form>
-                    <div>북마크: {{ feed.bookmarks }}</div>
+                    <form action="/code_feed/bookmarks/{{ feed.id }}/" method="post">
+                        {% csrf_token %}
+                    <button type="submit">북마크</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
