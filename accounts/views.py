@@ -104,3 +104,9 @@ def logout_view(request):
         return redirect(LOGOUT_REDIRECT_URL)
     else:
         return HttpResponseNotAllowed(["POST"])
+    
+
+def users_view(request):
+    if request.method == "GET":
+        users = UserModel.objects.all().values("username")
+        return render(request, "accounts/users.html", {'users': users})

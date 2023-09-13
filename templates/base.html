@@ -16,6 +16,10 @@
                         <a class="nav-link {% if request.path == index_url %}active{% endif %}" href="{{ index_url }}">코드피드</a>
                     </li>
                     <li class="nav-item">
+                        {% url 'accounts:members' as members_url %}
+                        <a class="nav-link {% if request.path == members_url %}active{% endif %}" href="{{ members_url }}">멤버</a>
+                    </li>
+                    <li class="nav-item">
                         {% url 'code_feed:problems' as problems_url %}
                         <a class="nav-link {% if request.path == problems_url %}active{% endif %}" href="{{ problems_url }}">알고리즘 문제</a>
                     </li>

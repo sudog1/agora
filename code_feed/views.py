@@ -4,7 +4,6 @@ from code_feed.models import ProblemModel, CodeModel, CommentModel
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-import csv
 
 
 # Create your views here.
