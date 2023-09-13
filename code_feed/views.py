@@ -20,6 +20,11 @@ def index_view(request):
 
 
 @login_required
+def detail_view(request, code_id):
+    pass
+
+
+@login_required
 def create_view(request):
     if request.method == "GET":
         return render(request, "code_feed/create.html")

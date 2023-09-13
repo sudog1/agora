@@ -67,8 +67,9 @@ def sign_up(request):
 
 
 @login_required
-def mypage_view(request):
+def mypage_view(request, user_id):
     if request.method == "GET":
+        page_user = UserModel.objects.get(id=user_id)
         user = request.user
         feeds = CodeModel.objects.all()
         context = {
