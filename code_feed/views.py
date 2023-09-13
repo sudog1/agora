@@ -4,18 +4,49 @@ from code_feed.models import ProblemModel, CodeModel, CommentModel
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.core.paginator import Paginator
+from config.settings import PAGE_RANGE, PER_PAGE
+from django.db import connection
 
 
-# Create your views here.
+def paginate(feeds, cur_page):
+    paginator = Paginator(feeds, PER_PAGE)
+    page_obj = paginator.get_page(cur_page)
+    if PAGE_RANGE * 2 > paginator.num_pages:
+        page_head = 1
+        page_tail = paginator.num_pages + 1
+    else:
+        page_head = cur_page - PAGE_RANGE
+        page_tail = cur_page + PAGE_RANGE
+        if page_head < 1:
+            page_tail += 1 - page_head
+            page_head = 1
+        elif page_tail > paginator.num_pages:
+            page_head -= page_tail - paginator.num_pages - 1
+            page_tail = paginator.num_pages + 1
+    return {"feeds": page_obj, "page_range": range(page_head, page_tail)}
+
+
+# annotate(total_likes=Count("likes"))
 def index_view(request):
     if request.method == "GET":
-        feeds = CodeModel.objects.annotate(total_likes=Count("likes")).all()
-        context = {
-            "feeds": feeds,
-        }
+        feeds = CodeModel.objects.select_related("author", "problem").annotate(
+            Count("likes")
+        )
+        a = len(connection.queries)
+
+        # 쿼리가 실제로 몇번 수행되는지 확인할 수 있습니다.
+        print(f"실행된 쿼리 수: {a}")
+        for feed in feeds:
+            print(feed.author)
+        b = len(connection.queries)
+        print(f"실행된 쿼리 수: {b}")
+
+        cur_page = max(int(request.GET.get("page", "1")), 1)
+        context = paginate(feeds, cur_page)
         return render(request, "code_feed/index.html", context)
     else:
-        return HttpResponse("invalid request method.", status=405)
+        return HttpResponseNotAllowed(["GET"])
 
 
 @login_required
@@ -28,15 +59,18 @@ def create_view(request):
     if request.method == "GET":
         return render(request, "code_feed/create.html")
     elif request.method == "POST":
+        problem = get_object_or_404(ProblemModel, number=request.POST("problem_num"))
+        user = request.user
+        user.score += problem.level
         CodeModel.objects.create(
-            problem=ProblemModel.objects.get(number=request.POST["problem"]),
-            content=request.POST["content"],
-            description=request.POST["description"],
-            author=request.user,
+            problem=problem,
+            content=request.POST.get("content"),
+            description=request.POST.get("description"),
+            author=user,
         )
-        return redirect("/code_feed/")
+        return redirect(reverse("code_feed:index"))
     else:
-        return HttpResponse("invalid request method.", status=405)
+        return HttpResponseNotAllowed(["GET", "POST"])
 
 
 @login_required
@@ -49,16 +83,10 @@ def update_view(request, code_id):
             return redirect(reverse("code_feed:detail", args=[code_id]))
     elif request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        problem_id = request.POST.get("problem")
-        problem = get_object_or_404(ProblemModel, id=problem_id)
-        if code.problem != problem:
-            code.author.score += problem.level - code.problem.level
-            code.author.save()
-            code.problem = problem
         code.content = request.POST.get("content")
         code.description = request.POST.get("description")
         code.save()
-        return redirect("/code_feed/")
+        return redirect(reverse("code_feed:detail", args=[code_id]))
     else:
         return HttpResponseNotAllowed(["GET", "POST"])
 
@@ -69,7 +97,7 @@ def delete_view(request, code_id):
         code = get_object_or_404(CodeModel, id=code_id)
         if request.user == code.user:
             code.delete()
-            return redirect("/code_feed/")
+            return redirect(reverse("code_feed:index"))
         else:
             return HttpResponse(
                 "You are not allowed to delete this content.", status=403

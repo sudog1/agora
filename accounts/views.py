@@ -21,7 +21,6 @@ def signup_view(request):
         email = request.POST.get("email", "")
         github_address = request.POST.get("github_address", "")
         profile_image = request.FILES.get("profile_image", None)
-
         exist_user = get_user_model().objects.filter(username=username)
 
         if password != password2:
@@ -104,9 +103,9 @@ def logout_view(request):
         return redirect(LOGOUT_REDIRECT_URL)
     else:
         return HttpResponseNotAllowed(["POST"])
-    
 
-def users_view(request):
+
+def members_view(request):
     if request.method == "GET":
-        users = UserModel.objects.all().values("username")
-        return render(request, "accounts/users.html", {'users': users})
+        members = UserModel.objects.values("username", "score")
+        return render(request, "accounts/members.html", {"members": members})

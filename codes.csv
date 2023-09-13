@@ -1,4 +1,4 @@
-timestamp,name,track,_,code,github,_,number,_
+timestamp,name,track,problem,code,github,date,problem_number,level
 2023. 8. 23 오후 10:29:25,테스트,AI,1 - ,-,-,2023. 8. 24,1,1
 2023. 8. 24 오전 9:55:08,김민태,Unity,1 - 짝수와 홀수,"public class Solution {
     public string solution(int num) {
