@@ -1,14 +1,36 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    회원가입
+Sign Up
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+<div class="container">
+    <div class="wrap">
+        <h2 class="title-center">회원가입</h2>
+        <form class="form-area" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+        <hr>
+        <div style="float: right">
+            <button type="submit" class="btn btn-primary">회원가입</button>
+            <a href="#" class="btn btn-secondary">로그인 페이지로</a>
+        </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+    <!-- <div class="container">
         <div class="wrap">
             <h2 class="title-center">회원가입</h2>
-            <form class="form-area" method="post" action="/sign-up/" enctype="multipart/form-data">
+            <form class="form-area" method="post" enctype="multipart/form-data">
                 {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
                 {% csrf_token %}
                 <div class="form-group mt-2 mb-2">
@@ -43,9 +65,8 @@
                 <hr>
                 <div style="float: right">
                     <button type="submit" class="btn btn-primary">회원가입</button>
-                    <a href="/sign-in" class="btn btn-secondary">로그인 페이지로</a>
+                    <a href="{% url 'accounts:login' %}" class="btn btn-secondary">로그인 페이지로</a>
                 </div>
             </form>
         </div>
-    </div>
-{% endblock %}
+    </div> -->

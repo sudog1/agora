@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    회원가입
+My Page
 {% endblock %}
 
 {% block content %}
@@ -25,41 +25,39 @@
                     <span>No github address</span>
                 {% endif %}
                 <hr>
-                <div style="float: right">
-                    <button type="submit" class="btn btn-primary">회원가입</button>
-                    <a href="/sign-in" class="btn btn-secondary">로그인 페이지로</a>
-                </div>
             </form>
-            <!-- <div class="row">
-                {% for tw in code_feed %}
-                    <div class="col-md-12 mb-2">
-                        <div class="card">
-                            <div class="card-body">
-                                {% if tw.author == user %}
-                                <div style="text-align: right">
-                                    <a href="/tweet/delete/{{ tw.id }}">
-                                        <span class="badge rounded-pill bg-danger">삭제</span>
-                                    </a>
+        </div>
+        <div class="row">
+            {% for feed in feeds %}
+                {% if feed.author == user %}
+                <div class="col-md-12 mb-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- {% if feed.author == user %}
+                            <div style="text-align: right">
+                                <a href="/tweet/delete/{{ tw.id }}">
+                                    <span class="badge rounded-pill bg-danger">삭제</span>
+                                </a>
+                            </div>
+                            {% endif %} -->
+                            <div style="text-align: right">
+                                <a href="#">
+                                    <span class="badge rounded-pill bg-success">보기</span>
+                                </a>
+                            </div>
+                            <div class="media">
+                                <div class="media-body">
+                                        <h5 class="mt-0">{{ feed.content }}</h5>
                                 </div>
-                                {% endif %}
-                                                    <div style="text-align: right">
-                                                        <a href="#">
-                                                            <span class="badge rounded-pill bg-success">보기</span>
-                                                        </a>
-                                                    </div>
-                                <div class="media">
-                                    <div class="media-body">
-                                        <h5 class="mt-0">{{ tw.content }}</h5>
-                                    </div>
-                                    <div style="text-align: right">
-                                        <span style="font-size: small">{{ tw.author.username }}-{{ tw.created_at|timesince }} 전</span>
-                                    </div>
+                                <div style="text-align: right">
+                                    <span style="font-size: small">{{ feed.author.username }}-{{ feed.created_at|timesince }} 전</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
-            </div> -->
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
