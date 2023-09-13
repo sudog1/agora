@@ -6,7 +6,7 @@ from django.conf.global_settings import LOGIN_URL
 from .models import UserModel
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from code_feed.models import ProblemModel, CodeModel, CommentModel
+from code_feed.models import ProblemModel, CodeModel
 from .forms import CustomUserCreationForm
 
 
