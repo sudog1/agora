@@ -8,5 +8,8 @@ urlpatterns = [
     path("create/", views.create, name="create"),
     path("update/<int:code_id>/", views.update_view, name="update"),
     path("problems/", views.problems_view, name="problems"),
-    path("insert/problems/", views.insert_problems_view, name="insert")
+    path("insert/problems/", views.insert_problems_view, name="insert"),
+    path("likes/<int:code_id>/", views.press_like, name="likes"),
+    path("bookmark/<int:code_id>/", views.bookmark, name="bookmark"),
+
 ]

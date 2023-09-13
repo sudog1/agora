@@ -13,6 +13,7 @@ import csv
 def index(request):
     if request.method == "GET":
         feeds = CodeModel.objects.annotate(total_likes=Count('likes')).all()
+        print(f"CodeModel.objects.annotate(total_likes=Count('likes')) : {type(CodeModel.objects.annotate(total_likes=Count('likes')).all())}")
         context = {
             "feeds": feeds,
         }
@@ -76,7 +77,9 @@ def delete(request, code_id):
 def press_like(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        if request.user in code.likes.all():
+        print(f'\ntype(request.user):{type(request.user)}\n')
+        print(f'\ntype(code.likes.all()):{type(code.likes.all())}\n')
+        if request.user in code.likes:
             code.likes.remove(request.user)
         else:
             code.likes.add(request.user)
@@ -121,7 +124,7 @@ def problems_view(request):
     if request.method == "GET":
         problems = ProblemModel.objects.values_list("number", "title", "link", "level")
         color_types = [
-            "",
+            "", 
             "table-default",
             "table-primary",
             "table-success",
