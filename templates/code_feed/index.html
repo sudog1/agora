@@ -6,11 +6,11 @@ Code Feed
 
 {% block content %}
 <a href="{% url 'code_feed:create' %}">코드 제출</a>
-<a href="/code_feed/update/1">업데이트</a>
+<a href="/code_feed/update/4/">업데이트</a>
 <ul>
     {% for feed in feeds %}
         <li>
-            <div>문제{{ feed.problem }}</div>
+            <div>문제{{ feed.problem.title }}</div>
             <pre>
             <div>{{ feed.content }}</div>
             </pre>

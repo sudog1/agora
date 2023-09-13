@@ -50,29 +50,31 @@ def signup_view(request):
 
 
 def sign_up(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         form = CustomUserCreationForm()
         context = {
-            'form' : form,
+            "form": form,
         }
-        return render(request, 'accounts/signup.html', context)
-    elif request.method == 'POST':
+        return render(request, "accounts/signup.html", context)
+    elif request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid() :
+        if form.is_valid():
             user = form.save()
-            return render(request, 'accounts/signin.html', {'notice': '회원가입 완료! 로그인을 해주세요.'})
+            auth.login(request, user)
+            return redirect(LOGIN_REDIRECT_URL)
         else:
-            return render(request, 'accounts/signup.html', {'error': form.errors})
-            
+            return render(request, "accounts/signup.html", {"error": form.errors})
 
+
+@login_required
 def mypage_view(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         user = request.user
         feeds = CodeModel.objects.all()
         context = {
             "feeds": feeds,
         }
-        return render(request, 'accounts/mypage.html', context)
+        return render(request, "accounts/mypage.html", context)
 
 
 # sign-in에서 login으로 변경했습니다.
@@ -101,9 +103,3 @@ def logout_view(request):
         return redirect(LOGOUT_REDIRECT_URL)
     else:
         return HttpResponseNotAllowed(["POST"])
-
-
-@login_required
-def mypage_view(request):
-    if request.method == "GET":
-        return render(request, "accounts/mypage.html")

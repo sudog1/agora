@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 import csv
 
+
 # Create your views here.
 def index_view(request):
     if request.method == "GET":
-        feeds = CodeModel.objects.annotate(total_likes=Count('likes')).all()
+        feeds = CodeModel.objects.annotate(total_likes=Count("likes")).all()
         context = {
             "feeds": feeds,
         }
@@ -24,7 +25,7 @@ def create_view(request):
         return render(request, "code_feed/create.html")
     elif request.method == "POST":
         CodeModel.objects.create(
-            problem=request.POST['problem'],
+            problem=ProblemModel.objects.get(number=request.POST["problem"]),
             content=request.POST["content"],
             description=request.POST["description"],
             author=request.user,
@@ -44,7 +45,7 @@ def update_view(request, code_id):
             return redirect(reverse("code_feed:detail", args=[code_id]))
     elif request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        problem_id = request.POST.get("problem_id")
+        problem_id = request.POST.get("problem")
         problem = get_object_or_404(ProblemModel, id=problem_id)
         if code.problem != problem:
             code.author.score += problem.level - code.problem.level
@@ -100,7 +101,6 @@ def bookmarks_view(request, code_id):
         return HttpResponse("invalid request method.", status=405)
 
 
-@login_required
 def problems_view(request):
     if request.method == "GET":
         problems = ProblemModel.objects.values_list("number", "title", "link", "level")
