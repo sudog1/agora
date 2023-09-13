@@ -5,6 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import UserModel
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from code_feed.models import ProblemModel, CodeModel, CommentModel
+from .forms import CustomUserCreationForm
 
 @csrf_exempt
 def sign_up_view(request):
@@ -31,10 +33,31 @@ def sign_up_view(request):
             return HttpResponse('회원가입 성공!')
 
 @csrf_exempt
+def sign_up(request):
+    if request.method == 'GET':
+        form = CustomUserCreationForm()
+        context = {
+            'form' : form,
+        }
+        return render(request, 'accounts/signup.html', context)
+    elif request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, request.FILES)
+        if form.is_valid() :
+            user = form.save()
+            return render(request, 'accounts/signin.html', {'notice': '회원가입 완료! 로그인을 해주세요.'})
+        else:
+            return render(request, 'accounts/signup.html', {'error': form.errors})
+            
+
+@csrf_exempt
 def mypage_view(request):
     if request.method == 'GET':
         user = request.user
-        return render(request, 'accounts/mypage.html')
+        feeds = CodeModel.objects.all()
+        context = {
+            "feeds": feeds,
+        }
+        return render(request, 'accounts/mypage.html', context)
 
 @csrf_exempt
 def sign_in_view(request):
