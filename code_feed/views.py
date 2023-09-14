@@ -10,7 +10,7 @@ import csv
 # Create your views here.
 def index_view(request):
     if request.method == "GET":
-        feeds = CodeModel.objects.annotate(total_likes=Count("likes")).all()
+        feeds = CodeModel.objects.annotate(total_likes=Count('likes')).all()
         context = {
             "feeds": feeds,
         }
@@ -21,7 +21,11 @@ def index_view(request):
 
 @login_required
 def detail_view(request, code_id):
-    pass
+    code = CodeModel.objects.get(id=code_id)
+    context = {
+        "code": code,
+    }
+    return render(request, "code_feed/detail.html", context)
 
 
 @login_required
@@ -83,11 +87,14 @@ def delete_view(request, code_id):
 def likes_view(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        if request.user in code.likes.all():
-            code.likes.remove(request.user)
+        if request.user == code.author:
+            if request.user in code.likes.all():
+                code.likes.remove(request.user)
+            else:
+                code.likes.add(request.user)
+            return redirect("/code_feed/")
         else:
-            code.likes.add(request.user)
-        return redirect("/code_feed/")
+            return HttpResponse("You are not allowed to press this content.", status=403)
     else:
         return HttpResponse("invalid request method.", status=405)
 
@@ -96,12 +103,15 @@ def likes_view(request, code_id):
 def bookmarks_view(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        if request.user in code.bookmarks.all():
-            code.bookmarks.remove(request.user)
-            return redirect("/code_feed/")
+        if request.user == code.author:
+            if request.user in code.bookmarks.all():
+                code.bookmarks.remove(request.user)
+                return redirect("/code_feed/")
+            else:
+                code.bookmarks.add(request.user)
+                return redirect("/code_feed/")
         else:
-            code.bookmarks.add(request.user)
-            return redirect("/code_feed/")
+            return HttpResponse("You are not allowed to press this content.", status=403)
     else:
         return HttpResponse("invalid request method.", status=405)
 
@@ -110,7 +120,7 @@ def problems_view(request):
     if request.method == "GET":
         problems = ProblemModel.objects.values_list("number", "title", "link", "level")
         color_types = [
-            "",
+            "", 
             "table-default",
             "table-primary",
             "table-success",

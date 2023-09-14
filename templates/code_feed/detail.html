@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+detail
+{% endblock %}
+
+{% block content %}
+<ul>
+        <li>
+            <div>
+                <div>
+                    <form class="form-area" method="post" enctype="multipart/form-data">
+                        {% if page_user.profile_image %}
+                            <img src="{{ page_user.profile_image.url }}" alt="프로필 이미지">
+                        {% else %}
+                            <span>No Image File</span>
+                        {% endif %}
+                    </form>
+                </div>
+                <div>작성자: {{ code.author }}</div>
+                <div>문제{{ code.problem }}</div>  
+            </div>
+            <pre>
+            <div>{{ code.content }}</div>
+            </pre>
+            <div>
+                <div>{{ code.description }}</div>
+                <div>좋아요 수: {{ code.total_likes }}</div>
+                <form action="/code_feed/likes/{{ code.id }}/" method="post">
+                    {% csrf_token %}
+                    <button type="submit">좋아요</button>
+                </form>
+                <form action="/code_feed/bookmarks/{{ code.id }}/" method="post">
+                    {% csrf_token %}
+                    <button type="submit">북마크</button>
+                </form>
+            </div>
+            <div>댓글란</div>
+        </li>
+</ul>
+{% endblock %}
