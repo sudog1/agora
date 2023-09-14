@@ -7,49 +7,11 @@ from .models import UserModel
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from code_feed.models import ProblemModel, CodeModel, CommentModel
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+from django.urls import reverse
 
 
-# sign-up 에서 signup으로 변경했습니다.
 def signup_view(request):
-    if request.method == "GET":
-        return render(request, "accounts/signup.html")
-    elif request.method == "POST":
-        username = request.POST.get("username", "")
-        password = request.POST.get("password", "")
-        password2 = request.POST.get("password2", "")
-        email = request.POST.get("email", "")
-        github_address = request.POST.get("github_address", "")
-        profile_image = request.FILES.get("profile_image", None)
-
-        exist_user = get_user_model().objects.filter(username=username)
-
-        if password != password2:
-            return render(
-                request, "accounts/signup.html", {"error": "패스워드가 일치하지 않습니다."}
-            )
-        elif username == "" or password == "":
-            return render(
-                request, "accounts/signup.html", {"error": "유저네임과 패스워드는 필수 입력 항목입니다."}
-            )
-        elif exist_user:
-            return render(request, "accounts/signup.html", {"error": "이미 존재하는 사용자입니다."})
-        else:
-            user = UserModel.objects.create_user(
-                username=username,
-                password=password,
-                email=email,
-                github_address=github_address,
-                profile_image=profile_image,
-            )
-            auth.login(request, user)
-            return redirect(LOGIN_REDIRECT_URL)
-    else:
-        # 허용된 api method에 대해서만 응답하고 그렇지 않은 경우 405에러를 발생시킵니다.
-        return HttpResponseNotAllowed(["GET", "POST"])
-
-
-def sign_up(request):
     if request.method == "GET":
         form = CustomUserCreationForm()
         context = {
@@ -64,6 +26,9 @@ def sign_up(request):
             return redirect(LOGIN_REDIRECT_URL)
         else:
             return render(request, "accounts/signup.html", {"error": form.errors})
+    else:
+        # 허용된 api method에 대해서만 응답하고 그렇지 않은 경우 405에러를 발생시킵니다.
+        return HttpResponseNotAllowed(["GET", "POST"])
 
 
 @login_required
@@ -73,9 +38,43 @@ def mypage_view(request, user_id):
         user = request.user
         feeds = CodeModel.objects.all()
         context = {
+            "user": user,
+            "page_user": page_user,
             "feeds": feeds,
         }
         return render(request, "accounts/mypage.html", context)
+    elif request.method == "POST":
+        user = request.user
+        page_user = UserModel.objects.get(id=user_id)
+        feeds = CodeModel.objects.all()
+
+        email = request.POST.get('email')
+        github_address = request.POST.get('github_address')
+        profile_image = request.FILES.get('profile_image', None)
+        
+        if(profile_image == None):
+            profile_image = user.profile_image
+        if(request.POST.get('profile_image_delete')):
+            profile_image = None
+
+        print(request.POST)
+        
+        user.email = email
+        user.github_address = github_address
+        user.profile_image = profile_image
+        user.save()
+
+        context = {
+            "user": user,
+            "page_user": page_user,
+            "feeds": feeds,
+        }
+
+        return redirect(f'/accounts/mypage/{user_id}')
+
+    else:
+        # 허용된 api method에 대해서만 응답하고 그렇지 않은 경우 405에러를 발생시킵니다.
+        return HttpResponseNotAllowed(["GET", "POST"])
 
 
 # sign-in에서 login으로 변경했습니다.

@@ -8,28 +8,50 @@ My Page
     <div class="container">
         <div class="wrap">
             <h2 class="title-center">마이페이지</h2>
-            <form class="form-area" method="post" enctype="multipart/form-data">
-                {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
-                {% if user.profile_image %}
-                    <img src="{{ user.profile_image.url }}" alt="프로필 이미지">
+            {% if user == page_user %}
+                <button id="editProfileBtn">프로필 수정하기</button>
+            {% endif %}
+            <form class="form-area" method="post" enctype="multipart/form-data" id="profileForm">
+                {% csrf_token %}
+                <div id="imageInput" style="display: none">
+                    {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
+                    <label for="profile_image">프로필 이미지</label>
+                    <input type="file" class="form-control-file" accept="image/png, image/jpeg" id="profile_image" name="profile_image">
+                    <button id="deleteProfileImage" >프로필 사진 삭제</button>
+                    <input type="hidden" id="profile_image_delete" name="profile_image_delete">
+                    <span style="display: none" id="profile_image_delete_comment">프로필 사진 삭제됨</span>
+                </div>
+
+                <img id="preview_image" src="#" alt="프로필 이미지 미리보기" style="display: none;">
+                {% if page_user.profile_image %}
+                    <img id="original_image" src="{{ user.profile_image.url }}" alt="프로필 이미지" style="display: block;">
                 {% else %}
                     <span>No Image File</span>
                 {% endif %}
                 <hr>
-                <span>{{ user.username }}</span> <br>
-                <span>email : {{ user.email }}</span> <br>
-                {% if user.github_address %}
-                    <span>github : </span>
-                    <a href="{{ user.github_address }}">{{ user.github_address }}</a>
+
+                <span>{{ page_user.username }}</span>
+                <input type="hidden" value="{{ page_user.username }}" id="username" name="username"> 
+                <br>
+                email : <span id="emailSpan">{{ page_user.email }}</span> 
+                <input type="hidden" value="{{ page_user.email }}" id="email" name="email">
+                <br>
+                {% if page_user.github_address %}
+                    github :
+                    <span id="githubSpan">
+                        <a href="{{ user.github_address }}">{{ page_user.github_address }}</a>
+                    </span>
                 {% else %}
                     <span>No github address</span>
                 {% endif %}
+                <input type="hidden" value="{{ page_user.github_address }}" id="github_address" name="github_address">
                 <hr>
+                <button type="submit" id="editProfileCompleteBtn" style="display: none;">수정</button>
             </form>
         </div>
         <div class="row">
             {% for feed in feeds %}
-                {% if feed.author == user %}
+                {% if feed.author == page_user %}
                 <div class="col-md-12 mb-2">
                     <div class="card">
                         <div class="card-body">
@@ -60,4 +82,66 @@ My Page
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        // 이미지 미리보기 코드 추가
+        document.getElementById("profile_image").addEventListener("change", function (event) {
+            var input = event.target;
+            var previewImage = document.getElementById("preview_image");
+    
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    // 미리보기 이미지의 소스를 업데이트하고 보이도록 설정
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = "block";
+
+                    var originalImage = document.getElementById("original_image");
+                    if (originalImage) {
+                        originalImage.style.display = "none";
+                    }
+                };
+    
+                // 파일을 읽기 시작
+                reader.readAsDataURL(input.files[0]);
+            }
+        });
+
+        document.getElementById("editProfileBtn").addEventListener("click", function() {
+            var emailInput = document.getElementById("email");
+            var emailSpan = document.getElementById("emailSpan");
+            var githubInput = document.getElementById("github_address");
+            var githubSpan = document.getElementById("githubSpan");
+            var imageInput = document.getElementById("imageInput");
+            var editProfileCompleteBtn = document.getElementById("editProfileCompleteBtn");
+            var editProfileBtn = document.getElementById("editProfileBtn");
+
+            emailInput.type = "text";
+            emailSpan.style.display = "none";
+            githubInput.type = "text";
+            githubSpan.style.display = "none";
+            imageInput.style.display = "block";
+            editProfileCompleteBtn.style.display = "block";
+            editProfileBtn.style.display = "none";
+        })
+
+        document.getElementById('deleteProfileImage').addEventListener('click', function(event) {
+            event.preventDefault(); 
+
+            // 폼 요소를 가져옵니다.
+            var form = document.getElementById('profileForm');
+            
+            // "deleteProfileImage" 키와 "True" 값을 추가합니다.
+            var input = document.getElementById("profile_image_delete");
+            var comment = document.getElementById("profile_image_delete_comment");
+            var originalImage = document.getElementById("original_image");
+
+            input.value = "True";
+            comment.style.display = "block";
+            originalImage.style.display = "none";
+
+            form.appendChild(input);
+        });
+    </script>
 {% endblock %}
