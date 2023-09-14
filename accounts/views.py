@@ -54,7 +54,7 @@ def mypage_view(request, user_id):
         
         if(profile_image == None):
             profile_image = user.profile_image
-        if(request.POST.get('profile_image_delete')):
+        if(request.POST.get('profile_image_delete') == 'True'):
             profile_image = None
 
         print(request.POST)

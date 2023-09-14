@@ -13,11 +13,11 @@ My Page
             {% endif %}
             <form class="form-area" method="post" enctype="multipart/form-data" id="profileForm">
                 {% csrf_token %}
-                <div id="imageInput" style="display: none">
+                <div id="image_Input" style="display: none">
                     {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
                     <label for="profile_image">프로필 이미지</label>
                     <input type="file" class="form-control-file" accept="image/png, image/jpeg" id="profile_image" name="profile_image">
-                    <button id="deleteProfileImage" >프로필 사진 삭제</button>
+                    <button id="deleteProfileImageBtn" >프로필 사진 삭제</button>
                     <input type="hidden" id="profile_image_delete" name="profile_image_delete">
                     <span style="display: none" id="profile_image_delete_comment">프로필 사진 삭제됨</span>
                 </div>
@@ -46,7 +46,7 @@ My Page
                 {% endif %}
                 <input type="hidden" value="{{ page_user.github_address }}" id="github_address" name="github_address">
                 <hr>
-                <button type="submit" id="editProfileCompleteBtn" style="display: none;">수정</button>
+                <button type="submit" id="editProfileComplete_Btn" style="display: none;">수정</button>
             </form>
         </div>
         <div class="row">
@@ -113,8 +113,8 @@ My Page
             var emailSpan = document.getElementById("emailSpan");
             var githubInput = document.getElementById("github_address");
             var githubSpan = document.getElementById("githubSpan");
-            var imageInput = document.getElementById("imageInput");
-            var editProfileCompleteBtn = document.getElementById("editProfileCompleteBtn");
+            var imageInput = document.getElementById("image_Input");
+            var editProfileCompleteBtn = document.getElementById("editProfileComplete_Btn");
             var editProfileBtn = document.getElementById("editProfileBtn");
 
             emailInput.type = "text";
@@ -126,7 +126,7 @@ My Page
             editProfileBtn.style.display = "none";
         })
 
-        document.getElementById('deleteProfileImage').addEventListener('click', function(event) {
+        document.getElementById('deleteProfileImageBtn').addEventListener('click', function(event) {
             event.preventDefault(); 
 
             // 폼 요소를 가져옵니다.
@@ -136,10 +136,26 @@ My Page
             var input = document.getElementById("profile_image_delete");
             var comment = document.getElementById("profile_image_delete_comment");
             var originalImage = document.getElementById("original_image");
+            var previewImage = document.getElementById("preview_image");
+            var deleteProfileImageBtn = document.getElementById('deleteProfileImageBtn');
 
-            input.value = "True";
-            comment.style.display = "block";
-            originalImage.style.display = "none";
+            if (input.value === "True") {
+                input.value = "False";
+                comment.style.display = "none";
+                originalImage.style.display = "block";
+                if (previewImage) {
+                    previewImage.style.display = "block";
+                    originalImage.style.display = "none";
+                }
+                deleteProfileImageBtn.innerHTML = "프로필 사진 삭제"
+            } else {
+                input.value = "True";
+                comment.style.display = "block";
+                originalImage.style.display = "none";
+                previewImage.style.display = "none";
+                deleteProfileImageBtn.innerHTML = "프로필 사진 삭제 취소"
+            }
+            
 
             form.appendChild(input);
         });
