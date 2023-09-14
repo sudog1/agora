@@ -12,4 +12,4 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = UserCreationForm.Meta.fields + ('email', 'github_address', 'profile_image',)
+        fields = UserCreationForm.Meta.fields + ('email', 'github_address',)
