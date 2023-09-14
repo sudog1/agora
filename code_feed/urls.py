@@ -13,5 +13,4 @@ urlpatterns = [
     path("likes/<int:code_id>/", views.likes_view, name="likes"),
     path("bookmarks/<int:code_id>/", views.bookmarks_view, name="bookmarks"),
     path("problems/", views.problems_view, name="problems"),
-    path("insert/problems/", views.insert_problems_view, name="insert")
 ]
