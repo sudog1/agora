@@ -1,22 +1,63 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseNotAllowed
-from code_feed.models import ProblemModel, CodeModel, CommentModel
+from code_feed.models import ProblemModel, CodeModel
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-import csv
+from django.core.paginator import Paginator
+from config.settings import PAGE_RANGE, PER_PAGE
+from django.db import connection
 
 
-# Create your views here.
+def paginate(feeds, cur_page):
+    paginator = Paginator(feeds, PER_PAGE)
+    page_obj = paginator.get_page(cur_page)
+    if PAGE_RANGE * 2 > paginator.num_pages:
+        page_head = 1
+        page_tail = paginator.num_pages + 1
+    else:
+        page_head = cur_page - PAGE_RANGE
+        page_tail = cur_page + PAGE_RANGE
+        if page_head < 1:
+            page_tail += 1 - page_head
+            page_head = 1
+        elif page_tail > paginator.num_pages:
+            page_head -= page_tail - paginator.num_pages - 1
+            page_tail = paginator.num_pages + 1
+    return [page_obj, range(page_head, page_tail)]
+
+
 def index_view(request):
     if request.method == "GET":
-        feeds = CodeModel.objects.annotate(total_likes=Count('likes')).all()
+        # track = request.GET.get("track")
+        feeds = (
+            CodeModel.objects.filter(author__track="AI")
+            .select_related("author", "problem")
+            .annotate(Count("likes"))
+            .order_by("-created_at")
+        )
+
+        # a = len(connection.queries)
+        # print(f"실행된 쿼리 수: {a}")
+        # for feed in feeds:
+        #     print(feed.author)
+        #     print(feed.problem.title)
+        # b = len(connection.queries)
+        # print(f"실행된 쿼리 수: {b}")
+
+        cur_page = max(int(request.GET.get("page", "1")), 1)
+        page_obj, page_range = paginate(feeds, cur_page)
         context = {
-            "feeds": feeds,
+            "feeds": page_obj,
+            "page_range": page_range,
         }
+        # if track == "AI":
+        #     context["lang"] = "python"
+        # else:
+        #     context["lang"] = "java"
         return render(request, "code_feed/index.html", context)
     else:
-        return HttpResponse("invalid request method.", status=405)
+        return HttpResponseNotAllowed(["GET"])
 
 
 @login_required
@@ -33,15 +74,18 @@ def create_view(request):
     if request.method == "GET":
         return render(request, "code_feed/create.html")
     elif request.method == "POST":
+        problem = get_object_or_404(ProblemModel, number=request.POST("problem_num"))
+        user = request.user
+        user.score += problem.level
         CodeModel.objects.create(
-            problem=ProblemModel.objects.get(number=request.POST["problem"]),
-            content=request.POST["content"],
-            description=request.POST["description"],
-            author=request.user,
+            problem=problem,
+            content=request.POST.get("content"),
+            description=request.POST.get("description"),
+            author=user,
         )
-        return redirect("/code_feed/")
+        return redirect(reverse("code_feed:index"))
     else:
-        return HttpResponse("invalid request method.", status=405)
+        return HttpResponseNotAllowed(["GET", "POST"])
 
 
 @login_required
@@ -54,16 +98,10 @@ def update_view(request, code_id):
             return redirect(reverse("code_feed:detail", args=[code_id]))
     elif request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        problem_id = request.POST.get("problem")
-        problem = get_object_or_404(ProblemModel, id=problem_id)
-        if code.problem != problem:
-            code.author.score += problem.level - code.problem.level
-            code.author.save()
-            code.problem = problem
         code.content = request.POST.get("content")
         code.description = request.POST.get("description")
         code.save()
-        return redirect("/code_feed/")
+        return redirect(reverse("code_feed:detail", args=[code_id]))
     else:
         return HttpResponseNotAllowed(["GET", "POST"])
 
@@ -74,7 +112,7 @@ def delete_view(request, code_id):
         code = get_object_or_404(CodeModel, id=code_id)
         if request.user == code.user:
             code.delete()
-            return redirect("/code_feed/")
+            return redirect(reverse("code_feed:index"))
         else:
             return HttpResponse(
                 "You are not allowed to delete this content.", status=403
@@ -94,7 +132,9 @@ def likes_view(request, code_id):
                 code.likes.add(request.user)
             return redirect("/code_feed/")
         else:
-            return HttpResponse("You are not allowed to press this content.", status=403)
+            return HttpResponse(
+                "You are not allowed to press this content.", status=403
+            )
     else:
         return HttpResponse("invalid request method.", status=405)
 
@@ -111,7 +151,9 @@ def bookmarks_view(request, code_id):
                 code.bookmarks.add(request.user)
                 return redirect("/code_feed/")
         else:
-            return HttpResponse("You are not allowed to press this content.", status=403)
+            return HttpResponse(
+                "You are not allowed to press this content.", status=403
+            )
     else:
         return HttpResponse("invalid request method.", status=405)
 
@@ -120,7 +162,7 @@ def problems_view(request):
     if request.method == "GET":
         problems = ProblemModel.objects.values_list("number", "title", "link", "level")
         color_types = [
-            "", 
+            "",
             "table-default",
             "table-primary",
             "table-success",

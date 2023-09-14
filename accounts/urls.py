@@ -10,4 +10,5 @@ urlpatterns = [
     path("mypage/<int:user_id>/", views.mypage_view, name="mypage"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
+    path("members/", views.members_view, name="members")
 ]

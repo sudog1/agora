@@ -5,5 +5,6 @@ app_name = "insert"
 
 urlpatterns = [
     path("problems/", views.insert_problems_view, name="problems"),
-    # path("codes/", views.insert_codes_view, name="codes"),
+    path("members/", views.insert_members_view, name="members"),
+    path("codes/", views.insert_codes_view, name="codes"),
 ]

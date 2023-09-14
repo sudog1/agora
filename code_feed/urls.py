@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
 
 app_name = "code_feed"
@@ -13,4 +13,6 @@ urlpatterns = [
     path("likes/<int:code_id>/", views.likes_view, name="likes"),
     path("bookmarks/<int:code_id>/", views.bookmarks_view, name="bookmarks"),
     path("problems/", views.problems_view, name="problems"),
+    # 댓글 기능을 위한 comments 네임스페이스
+    path("<int:code_id>/", include("comments.urls", namespace="comments")),
 ]

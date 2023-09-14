@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'code_feed/page.html' %}
 
 {% block title %}
 Code Feed
@@ -7,16 +7,18 @@ Code Feed
 {% block content %}
 <a href="{% url 'code_feed:create' %}">코드 제출</a>
 <a href="/code_feed/update/4/">업데이트</a>
+<!-- <a href="?track=AI">AI보기</a>
+<a href="?track=Unity">Unity보기</a> -->
 <ul>
     {% for feed in feeds %}
         <li>
             <div>문제{{ feed.problem.title }}</div>
             <pre>
-            <div>{{ feed.content }}</div>
+                <code class='python'>{{ feed.content }}</code>
             </pre>
             <div>{{ feed.description }}</div>
             <div>작성자: {{ feed.author }}</div>
-            <div>좋아요 수: {{ feed.total_likes }}</div>
+            <div>좋아요 수: {{ feed.likes__count }}</div>
             <form action="/code_feed/likes/{{ feed.id }}/" method="post">
                 {% csrf_token %}
                 <button type="submit">좋아요</button>
@@ -28,4 +30,5 @@ Code Feed
         </li>
     {% endfor %}
 </ul>
+
 {% endblock %}
