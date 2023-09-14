@@ -1,161 +1,312 @@
-{% extends 'code_feed/page.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
 My Page
 {% endblock %}
 
+{% block navigation %}
+{% include 'navigation.html' %}
+{% endblock %}
+
 {% block content %}
     <div class="container">
-        <div class="wrap">
-            <h2 class="title-center">마이페이지</h2>
-            {% if user == page_user %}
-                <button id="editProfileBtn">프로필 수정하기</button>
-            {% endif %}
-            <form class="form-area" method="post" enctype="multipart/form-data" id="profileForm">
-                {% csrf_token %}
-                <div id="image_Input" style="display: none">
-                    {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
-                    <label for="profile_image">프로필 이미지</label>
-                    <input type="file" class="form-control-file" accept="image/png, image/jpeg" id="profile_image" name="profile_image">
-                    <button id="deleteProfileImageBtn" >프로필 사진 삭제</button>
-                    <input type="hidden" id="profile_image_delete" name="profile_image_delete">
-                    <span style="display: none" id="profile_image_delete_comment">프로필 사진 삭제됨</span>
-                </div>
-
-                <img id="preview_image" src="#" alt="프로필 이미지 미리보기" style="display: none;">
-                {% if page_user.profile_image %}
-                    <img id="original_image" src="{{ user.profile_image.url }}" alt="프로필 이미지" style="display: block;">
-                {% else %}
-                    <span>No Image File</span>
-                {% endif %}
-                <hr>
-
-                <span>{{ page_user.username }}</span>
-                <input type="hidden" value="{{ page_user.username }}" id="username" name="username"> 
-                <br>
-                email : <span id="emailSpan">{{ page_user.email }}</span> 
-                <input type="hidden" value="{{ page_user.email }}" id="email" name="email">
-                <br>
-                {% if page_user.github_address %}
-                    github :
-                    <span id="githubSpan">
-                        <a href="{{ user.github_address }}">{{ page_user.github_address }}</a>
-                    </span>
-                {% else %}
-                    <span>No github address</span>
-                {% endif %}
-                <input type="hidden" value="{{ page_user.github_address }}" id="github_address" name="github_address">
-                <hr>
-                <button type="submit" id="editProfileComplete_Btn" style="display: none;">수정</button>
-            </form>
-        </div>
         <div class="row">
-            {% for feed in feeds %}
-                <div class="col-md-12 mb-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <!-- {% if feed.author == user %}
-                            <div style="text-align: right">
-                                <a href="/tweet/delete/{{ tw.id }}">
-                                    <span class="badge rounded-pill bg-danger">삭제</span>
-                                </a>
+            <div name="profile_section" class="col-md-4" style="margin-top: 20px;">
+                <form class="form-area" method="post" enctype="multipart/form-data" id="profileForm">
+                    {% csrf_token %}
+                    <span id="image_input" style="display: none;">
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
+                            <label for="profile_image" class="btn btn-outline-secondary">이미지 업로드</label>
+                            <input type="file" class="form-control-file" accept="image/png, image/jpeg" id="profile_image" name="profile_image" style="display: none;">
+                            <button id="deleteProfileImageBtn" class="btn btn-outline-secondary" style="margin: 10px;">프로필 사진 삭제</button>
+                            <input type="hidden" id="profile_image_delete" name="profile_image_delete">
+                            <span style="display: none" id="profile_image_delete_comment">프로필 사진 삭제됨</span>
+                        </div>
+                    </span>
+
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img id="preview_image" src="#" alt="프로필 이미지 미리보기" style="display: none; width: 200px; height: 200px; object-fit: cover;" class="img-fluid rounded-circle">
+                        {% if page_user.profile_image %}
+                            <img id="original_image" src="{{ user.profile_image.url }}" alt="프로필 이미지" style="display: block; width: 200px; height: 200px; object-fit: cover;" class="img-fluid rounded-circle">
+                        {% else %}
+                            <span>No Image File</span>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+                    <span>{{ page_user.username }}</span>
+                    <input type="hidden" value="{{ page_user.username }}" id="username" name="username"> 
+                    <br>
+                    email : <span id="emailSpan">{{ page_user.email }}</span> 
+                    <input type="hidden" value="{{ page_user.email }}" id="email" name="email" style="width: 100%;">
+                    <br>
+                    {% if page_user.github_address %}
+                        github :
+                        <span id="githubSpan">
+                            <a href="{{ user.github_address }}">{{ page_user.github_address }}</a>
+                        </span>
+                    {% else %}
+                        <span>No github address</span>
+                    {% endif %}
+                    <input type="hidden" value="{{ page_user.github_address }}" id="github_address" name="github_address" style="width: 100%;">
+                    <hr>
+                    <span id="edit_profile_complete" style="display: none; justify-content: center; align-items: center;">
+                        <button type="submit" class="btn btn-outline-secondary">수정</button>
+                    </span>
+
+                </form>
+                <div class="d-flex justify-content-center align-items-center">
+                    {% if user == page_user %}
+                    <button id="editProfileBtn" class="btn btn-outline-secondary">프로필 수정하기</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div name="right_section" class="col-md-8">
+                <div class="row">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example" style="margin-top: 20px;">
+                        <span id="my_code_feed_btn" class="col btn btn-outline-secondary active" onclick="toggleMyCodeFeed()">내 코드 피드</span>
+                        <span id="my_bookmarks_btn" class="col btn btn-outline-secondary">내 북마크</span>
+                        <span id="my_solved_problems_btn" class="col btn btn-outline-secondary" onclick="toggleMyCodeFeed()">내가 푼 문제</span>
+                    </div>
+                  </div>
+                
+                <div id="my_code_feed" class="col-md-12 mb-2" style="display: block; overflow: scroll; height: 100vh; margin-top: 10px; margin-bottom: 10px;">
+                    <!-- {% for feed in feeds %}
+                        {% if feed.author == user %}
+                        <div style="text-align: right">
+                            <a href="/tweet/delete/{{ tw.id }}">
+                                <span class="badge rounded-pill bg-danger">삭제</span>
+                            </a>
+                        </div>
+                        {% endif %}
+                        <div style="text-align: right">
+                            <a href="#">
+                                <span class="badge rounded-pill bg-success">보기</span>
+                            </a>
+                        </div>
+                        <div class="">
+                            <div class="">
+                                    <h5 class="">{{ feed.content }}</h5>
                             </div>
-                            {% endif %} -->
                             <div style="text-align: right">
-                                <a href="#">
-                                    <span class="badge rounded-pill bg-success">보기</span>
-                                </a>
-                            </div>
-                            <div class="media">
-                                <div class="media-body">
-                                        <h5 class="mt-0">{{ feed.content }}</h5>
-                                </div>
-                                <div style="text-align: right">
-                                    <span style="font-size: small">{{ feed.author.username }}-{{ feed.created_at|timesince }} 전</span>
-                                </div>
+                                <span style="font-size: small">{{ feed.author.username }}-{{ feed.created_at|timesince }} 전</span>
                             </div>
                         </div>
+                    {% endfor %} -->
+                    <div class="col">
+                        <ul>
+                            {% for feed in feeds %}
+                            <div class="card" style="margin-top: 20px; margin-bottom: 10px;">
+                                <div class="card-body">
+                                    <a href="{% url 'code_feed:detail' code_id=feed.id %}" style="text-decoration: none;">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item"><b>#{{feed.problem.number}}. {{ feed.problem.title }}</b></li>
+                                            <pre>
+                                                <code class='python'>{{ feed.content }}</code>
+                                            </pre>
+                                            <li class="list-group-item">좋아요 수: {{ feed.likes__count }}</li>
+                                        </ul>
+                                    </a>
+                                </div>
+                            </div>
+
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
-            {% endfor %}
+
+                <!-- <div id="my_bookmarks" style="margin-top: 20px; margin-bottom: 20px; display: none;"> 
+                    <ul class="list-group list-group-horizontal flex-fill list-group-item-secondary" style="margin-bottom: 20px;">
+                        <li class="list-group-item" style="width: 80px;">번호</li>
+                        <li class="list-group-item flex-fill">문제 title</li>
+                        <li class="list-group-item" style="width: 80px;">level</li>
+                    </ul>
+                    {% for feed in feeds %}
+                    <ul class="list-group list-group-horizontal flex-fill">
+                        <li class="list-group-item" style="width: 80px;">{{ feed.problem.number }}</li>
+                        <li class="list-group-item flex-fill"><a href="{{ feed.problem.link }}" target="_blank">{{ feed.problem.title }}</a></li>
+                        <li class="list-group-item" style="width: 80px;">{{ feed.problem.level }}</li>
+                    </ul>
+                    {% endfor %}
+                </div> -->
+                
+                <div id="my_solved_problems" style="margin-top: 20px; margin-bottom: 20px; display: none;"> 
+                    <ul class="list-group list-group-horizontal flex-fill list-group-item-secondary" style="margin-bottom: 20px;">
+                        <li class="list-group-item" style="width: 80px;">번호</li>
+                        <li class="list-group-item flex-fill">문제 title</li>
+                        <li class="list-group-item" style="width: 80px;">level</li>
+                    </ul>
+                    {% for feed in feeds %}
+                    <ul class="list-group list-group-horizontal flex-fill">
+                        <li class="list-group-item" style="width: 80px;">{{ feed.problem.number }}</li>
+                        <li class="list-group-item flex-fill"><a href="{{ feed.problem.link }}" target="_blank">{{ feed.problem.title }}</a></li>
+                        <li class="list-group-item" style="width: 80px;">{{ feed.problem.level }}</li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-
+    {% block pagination %}
+    {% include 'pagination.html' %}
+    {% endblock %}
     <script>
-        // 이미지 미리보기 코드 추가
-        document.getElementById("profile_image").addEventListener("change", function (event) {
-            var input = event.target;
-            var previewImage = document.getElementById("preview_image");
-    
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-    
-                reader.onload = function (e) {
-                    // 미리보기 이미지의 소스를 업데이트하고 보이도록 설정
-                    previewImage.src = e.target.result;
-                    previewImage.style.display = "block";
+        document.addEventListener("DOMContentLoaded", function() {
+            // 이미지 미리보기 코드 추가
+            document.getElementById("profile_image").addEventListener("change", function (event) {
+                var input = event.target;
+                var previewImage = document.getElementById("preview_image");
+        
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+        
+                    reader.onload = function (e) {
+                        // 미리보기 이미지의 소스를 업데이트하고 보이도록 설정
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = "block";
 
-                    var originalImage = document.getElementById("original_image");
-                    if (originalImage) {
+                        var originalImage = document.getElementById("original_image");
+                        if (originalImage) {
+                            originalImage.style.display = "none";
+                        }
+                    };
+        
+                    // 파일을 읽기 시작
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+
+            document.getElementById("editProfileBtn").addEventListener("click", function() {
+                var emailInput = document.getElementById("email");
+                var emailSpan = document.getElementById("emailSpan");
+                var githubInput = document.getElementById("github_address");
+                var githubSpan = document.getElementById("githubSpan");
+                var image_input = document.getElementById("image_input");
+                var edit_profile_complete = document.getElementById("edit_profile_complete");
+                var editProfileBtn = document.getElementById("editProfileBtn");
+
+                emailInput.type = "text";
+                emailSpan.style.display = "none";
+                githubInput.type = "text";
+                githubSpan.style.display = "none";
+                image_input.style.display = "block";
+                edit_profile_complete.style.display = "flex";
+                editProfileBtn.style.display = "none";
+
+            })
+
+            document.getElementById('deleteProfileImageBtn').addEventListener('click', function(event) {
+                event.preventDefault(); 
+
+                // 폼 요소를 가져옵니다.
+                var form = document.getElementById('profileForm');
+                
+                // "deleteProfileImage" 키와 "True" 값을 추가합니다.
+                var input = document.getElementById("profile_image_delete");
+                var comment = document.getElementById("profile_image_delete_comment");
+                var originalImage = document.getElementById("original_image");
+                var previewImage = document.getElementById("preview_image");
+                var deleteProfileImageBtn = document.getElementById('deleteProfileImageBtn');
+
+                if (input.value === "True") {
+                    input.value = "False";
+                    comment.style.display = "none";
+                    originalImage.style.display = "block";
+                    if (previewImage) {
+                        previewImage.style.display = "block";
                         originalImage.style.display = "none";
                     }
-                };
-    
-                // 파일을 읽기 시작
-                reader.readAsDataURL(input.files[0]);
-            }
-        });
-
-        document.getElementById("editProfileBtn").addEventListener("click", function() {
-            var emailInput = document.getElementById("email");
-            var emailSpan = document.getElementById("emailSpan");
-            var githubInput = document.getElementById("github_address");
-            var githubSpan = document.getElementById("githubSpan");
-            var imageInput = document.getElementById("image_Input");
-            var editProfileCompleteBtn = document.getElementById("editProfileComplete_Btn");
-            var editProfileBtn = document.getElementById("editProfileBtn");
-
-            emailInput.type = "text";
-            emailSpan.style.display = "none";
-            githubInput.type = "text";
-            githubSpan.style.display = "none";
-            imageInput.style.display = "block";
-            editProfileCompleteBtn.style.display = "block";
-            editProfileBtn.style.display = "none";
-        })
-
-        document.getElementById('deleteProfileImageBtn').addEventListener('click', function(event) {
-            event.preventDefault(); 
-
-            // 폼 요소를 가져옵니다.
-            var form = document.getElementById('profileForm');
-            
-            // "deleteProfileImage" 키와 "True" 값을 추가합니다.
-            var input = document.getElementById("profile_image_delete");
-            var comment = document.getElementById("profile_image_delete_comment");
-            var originalImage = document.getElementById("original_image");
-            var previewImage = document.getElementById("preview_image");
-            var deleteProfileImageBtn = document.getElementById('deleteProfileImageBtn');
-
-            if (input.value === "True") {
-                input.value = "False";
-                comment.style.display = "none";
-                originalImage.style.display = "block";
-                if (previewImage) {
-                    previewImage.style.display = "block";
+                    deleteProfileImageBtn.innerHTML = "프로필 사진 삭제"
+                } else {
+                    input.value = "True";
+                    comment.style.display = "block";
                     originalImage.style.display = "none";
+                    previewImage.style.display = "none";
+                    deleteProfileImageBtn.innerHTML = "프로필 사진 삭제 취소"
                 }
-                deleteProfileImageBtn.innerHTML = "프로필 사진 삭제"
-            } else {
-                input.value = "True";
-                comment.style.display = "block";
-                originalImage.style.display = "none";
-                previewImage.style.display = "none";
-                deleteProfileImageBtn.innerHTML = "프로필 사진 삭제 취소"
-            }
-            
+                
 
-            form.appendChild(input);
+                form.appendChild(input);
+            });
         });
+
+        function toggleMyCodeFeed() {
+            var myCodeFeed = document.getElementById("my_code_feed");
+            var myCodeFeedBtn = document.getElementById("my_code_feed_btn");
+            var mySolvedProbs = document.getElementById("my_solved_problems");
+            var mySolvedProbsBtn = document.getElementById("my_solved_problems_btn");
+
+            if (myCodeFeed.style.display === "none") {
+                myCodeFeed.style.display = "block";
+                myCodeFeedBtn.classList.add("active");
+                mySolvedProbs.style.display = "none";
+                mySolvedProbsBtn.classList.remove("active");
+            } else {
+                myCodeFeed.style.display = "none";
+                myCodeFeedBtn.classList.remove("active");
+                mySolvedProbs.style.display = "block";
+                mySolvedProbsBtn.classList.add("active");
+            }
+
+            saveMyCodeFeedState();
+        }
+
+        function saveMyCodeFeedState() {
+            var myCodeFeed = document.getElementById("my_code_feed");
+            var myCodeFeedBtn = document.getElementById("my_code_feed_btn");
+            var mySolvedProbs = document.getElementById("my_solved_problems");
+            var mySolvedProbsBtn = document.getElementById("my_solved_problems_btn");
+
+            // 현재 상태를 객체로 저장
+            var state = {
+                myCodeFeedVisible: myCodeFeed.style.display === "block",
+                myCodeFeedBtnActive: myCodeFeedBtn.classList.contains("active"),
+                mySolvedProbsVisible: mySolvedProbs.style.display === "block",
+                mySolvedProbsBtnActive: mySolvedProbsBtn.classList.contains("active"),
+            };
+
+            // 상태를 localStorage에 문자열로 저장
+            localStorage.setItem("myCodeFeedState", JSON.stringify(state));
+        }
+
+        function restoreMyCodeFeedState() {
+            var myCodeFeed = document.getElementById("my_code_feed");
+            var myCodeFeedBtn = document.getElementById("my_code_feed_btn");
+            var mySolvedProbs = document.getElementById("my_solved_problems");
+            var mySolvedProbsBtn = document.getElementById("my_solved_problems_btn");
+
+            // localStorage에서 상태를 가져와서 파싱
+            var storedState = localStorage.getItem("myCodeFeedState");
+            if (storedState) {
+                var state = JSON.parse(storedState);
+
+                // 저장된 상태를 기반으로 페이지 초기화
+                if (state.myCodeFeedVisible) {
+                    myCodeFeed.style.display = "block";
+                } else {
+                    myCodeFeed.style.display = "none";
+                }
+                if (state.myCodeFeedBtnActive) {
+                    myCodeFeedBtn.classList.add("active");
+                } else {
+                    myCodeFeedBtn.classList.remove("active");
+                }
+                if (state.mySolvedProbsVisible) {
+                    mySolvedProbs.style.display = "block";
+                } else {
+                    mySolvedProbs.style.display = "none";
+                }
+                if (state.mySolvedProbsBtnActive) {
+                    mySolvedProbsBtn.classList.add("active");
+                } else {
+                    mySolvedProbsBtn.classList.remove("active");
+                }
+            }
+        }
+
+        // 페이지가 로드될 때 저장된 상태를 복원
+        window.addEventListener("load", restoreMyCodeFeedState);
+
     </script>
 {% endblock %}

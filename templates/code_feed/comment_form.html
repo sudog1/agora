@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block navigation %} 
+{% include 'navigation.html' %} 
+{% endblock %} 
+
+{% block content %}
+<!-- 댓글 수정 폼 -->
+<div class="container my-3">
+    <form method="post" action="{% url 'code_feed:comments:update' code_id=code_id comment_id=comment.id %}"> 
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="content">댓글</label>
+            <textarea class="form-control" name="content" id="content" rows="4">{{ comment.content }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">저장하기</button>
+    </form>
+</div>
+{% endblock %}

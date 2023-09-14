@@ -1,0 +1,56 @@
+<div name="profile_section" class="col-md-3" style="margin-top: 50px;">
+    <form class="form-area" method="post" enctype="multipart/form-data" id="profileForm">
+        {% csrf_token %}
+        <span id="image_input" style="display: none;">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
+                <label for="profile_image" class="btn btn-outline-secondary">이미지 업로드</label>
+                <input type="file" class="form-control-file" accept="image/png, image/jpeg" id="profile_image" name="profile_image" style="display: none;">
+                <button id="deleteProfileImageBtn" class="btn btn-outline-secondary" style="margin: 10px;">프로필 사진 삭제</button>
+                <input type="hidden" id="profile_image_delete" name="profile_image_delete">
+                <span style="display: none" id="profile_image_delete_comment">프로필 사진 삭제됨</span>
+            </div>
+        </span>
+
+        <div class="d-flex justify-content-center align-items-center">
+            <img id="preview_image" src="#" alt="프로필 이미지 미리보기" style="display: none; width: 300px; height: 300px; object-fit: cover;" class="img-fluid rounded-circle">
+            {% if page_user and page_user.profile_image%}
+                <img id="original_image" src="{{ page_user.profile_image.url }}" alt="프로필 이미지" style="display: block; width: 300px; height: 300px; object-fit: cover;" class="img-fluid rounded-circle">
+            {% elif user.progile_image %}
+                <img id="original_image" src="{{ user.profile_image.url }}" alt="프로필 이미지" style="display: block; width: 300px; height: 300px; object-fit: cover;" class="img-fluid rounded-circle">
+            {% endif %}
+                <p>No Profile Image</p>
+        </div>
+
+        <hr>
+        {% if page_user %}
+        <span>{{ page_user.username }}</span>
+        {% else %}
+        <span>{{ user.username }}</span>
+        {% endif %}
+        <input type="hidden" value="{{ page_user.username }}" id="username" name="username"> 
+        <br>
+        email : <span id="emailSpan">{{ page_user.email }}</span> 
+        <input type="hidden" value="{{ page_user.email }}" id="email" name="email" style="width: 100%;">
+        <br>
+        {% if page_user.github_address %}
+            github :
+            <span id="githubSpan">
+                <a href="{{ user.github_address }}">{{ page_user.github_address }}</a>
+            </span>
+        {% else %}
+            <span>No github address</span>
+        {% endif %}
+        <input type="hidden" value="{{ page_user.github_address }}" id="github_address" name="github_address" style="width: 100%;">
+        <hr>
+        <span id="edit_profile_complete" style="display: none; justify-content: center; align-items: center;">
+            <button type="submit" class="btn btn-outline-secondary">수정</button>
+        </span>
+
+    </form>
+    <div class="d-flex justify-content-center align-items-center">
+        {% if user == page_user %}
+        <button id="editProfileBtn" class="btn btn-outline-secondary">프로필 수정하기</button>
+        {% endif %}
+    </div>
+</div>

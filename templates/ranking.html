@@ -1,0 +1,12 @@
+<div class="col-md-2">
+    <div class="row" style="background-color: rgba(78, 81, 13, 0.76); margin-top: 50px; margin-bottom: 10px;">
+        <h5 style="margin-top: 10px;">코드카타 랭킹 top 10</h5>
+        <ul>
+            {% for ranker in top_rankers %}
+            <a href="{% url 'accounts:mypage' user_id=ranker.id %}">
+            {{ ranker }}<br><br>
+            </a>
+        {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -11,7 +11,7 @@ def create_view(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
         content = request.POST.get("content")
-        code.comment.create(content=content, author=request.user)
+        code.comments.create(content=content, author=request.user)
         return redirect(reverse("code_feed:detail", args=[code_id]))
     else:
         return HttpResponseNotAllowed(["POST"])
@@ -22,11 +22,10 @@ def update_view(request, code_id, comment_id):
     if request.method == "GET":
         comment = get_object_or_404(CommentModel, id=comment_id)
         if comment.author == request.user:
-            return redirect(reverse("code_feed:detail", args=[code_id]))
             return render(
                 request,
-                #
-                {"code_id": code_id, "comment": comment},
+                "code_feed/comment_form.html",
+                {"code_id": code_id, "comment": comment_id},
             )
         else:
             return redirect(reverse("code:detail", args=[code_id]))

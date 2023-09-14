@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "accounts",
     "code_feed",
     "comments",
+    "insert",
 ]
 
 MIDDLEWARE = [
