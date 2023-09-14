@@ -1,5 +1,4 @@
 {% extends "base.html" %} 
-
 {% block title %} Create {% endblock %} 
 
 {% block navigation %} 
@@ -7,19 +6,6 @@
 {% endblock %} 
 
 {% block content %}
-<!-- <h1>codefeed 제출/수정</h1> -->
-<!-- action에 아무것도 넣지 않으면 현재 url로 post요청을 보냅니다. -->
-<!-- <form method="post">
-  {% csrf_token %}
-  <textarea name="content" id="content">{{ code.content }}</textarea>
-  <input
-    type="text"
-    name="description"
-    id="description"
-    value="{{ code.description }}"
-  />
-  <button type="submit">제출/수정</button>
-</form> -->
 <div class="container">
     <form method="post">
         {% csrf_token %}

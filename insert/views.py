@@ -51,7 +51,7 @@ def insert_problems_view(request):
         return HttpResponseNotAllowed(["GET"])
 
 
-@login_required
+# @login_required
 def insert_codes_view(request):
     if request.method == "GET":
         csv_file_path = "codes.csv"
