@@ -28,6 +28,3 @@ class CodeModel(models.Model):
     likes = models.ManyToManyField(UserModel, related_name="likes", blank=True)
     # (code) N:N (user)
     bookmarks = models.ManyToManyField(UserModel, related_name="bookmarks", blank=True)
-
-
-

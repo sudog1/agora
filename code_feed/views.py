@@ -118,44 +118,39 @@ def delete_view(request, code_id):
                 "You are not allowed to delete this content.", status=403
             )
     else:
-        return HttpResponse("invalid request method.", status=405)
+        return HttpResponseNotAllowed(["POST"])
 
 
 @login_required
 def likes_view(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        if request.user == code.author:
+        if request.user != code.author:
             if request.user in code.likes.all():
                 code.likes.remove(request.user)
             else:
                 code.likes.add(request.user)
-            return redirect("/code_feed/")
+            return redirect(reverse("code_feed:detail", args=[code_id]))
         else:
-            return HttpResponse(
-                "You are not allowed to press this content.", status=403
-            )
+            return redirect(reverse("code_feed:detail", args=[code_id]))
     else:
-        return HttpResponse("invalid request method.", status=405)
+        return HttpResponseNotAllowed(["POST"])
 
 
 @login_required
 def bookmarks_view(request, code_id):
     if request.method == "POST":
         code = get_object_or_404(CodeModel, id=code_id)
-        if request.user == code.author:
+        if request.user != code.author:
             if request.user in code.bookmarks.all():
                 code.bookmarks.remove(request.user)
-                return redirect("/code_feed/")
             else:
                 code.bookmarks.add(request.user)
-                return redirect("/code_feed/")
+            return redirect(reverse("code_feed:detail", args=[code_id]))
         else:
-            return HttpResponse(
-                "You are not allowed to press this content.", status=403
-            )
+            return redirect(reverse("code_feed:detail", args=[code_id]))
     else:
-        return HttpResponse("invalid request method.", status=405)
+        return redirect(reverse("code_feed:detail", args=[code_id]))
 
 
 def problems_view(request):
