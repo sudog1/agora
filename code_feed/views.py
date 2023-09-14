@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseNotAllowed
-from code_feed.models import ProblemModel, CodeModel, CommentModel
+from code_feed.models import ProblemModel, CodeModel
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -27,11 +27,14 @@ def paginate(feeds, cur_page):
     return {"feeds": page_obj, "page_range": range(page_head, page_tail)}
 
 
-# annotate(total_likes=Count("likes"))
 def index_view(request):
     if request.method == "GET":
-        feeds = CodeModel.objects.select_related("author", "problem").annotate(
-            Count("likes")
+        # track = request.GET.get("track")
+        feeds = (
+            CodeModel.objects.filter(author__track="AI")
+            .select_related("author", "problem")
+            .annotate(Count("likes"))
+            .order_by("-created_at")
         )
         a = len(connection.queries)
 
@@ -39,11 +42,16 @@ def index_view(request):
         print(f"실행된 쿼리 수: {a}")
         for feed in feeds:
             print(feed.author)
+            print(feed.problem.title)
         b = len(connection.queries)
         print(f"실행된 쿼리 수: {b}")
 
         cur_page = max(int(request.GET.get("page", "1")), 1)
         context = paginate(feeds, cur_page)
+        # if track == "AI":
+        #     context["lang"] = "python"
+        # else:
+        #     context["lang"] = "java"
         return render(request, "code_feed/index.html", context)
     else:
         return HttpResponseNotAllowed(["GET"])

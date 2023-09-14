@@ -12,5 +12,5 @@ class CommentModel(models.Model):
         CodeModel, on_delete=models.CASCADE, related_name="comments"
     )
     content = models.TextField(null=False, blank=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField()
     updated_at = models.DateTimeField(auto_now=True)

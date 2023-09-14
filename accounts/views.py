@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotAllowed
 from django.contrib.auth import get_user_model
+from code_feed.views import paginate
 from config.settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL
 from django.conf.global_settings import LOGIN_URL
 from .models import UserModel
@@ -71,8 +72,10 @@ def mypage_view(request, user_id):
         page_user = UserModel.objects.get(id=user_id)
         user = request.user
         feeds = CodeModel.objects.all()
+        cur_page = 1
+        
         context = {
-            "feeds": feeds,
+            "feeds": paginate(feeds, cur_page),
         }
         return render(request, "accounts/mypage.html", context)
 

@@ -5,6 +5,7 @@ from accounts.models import UserModel
 from code_feed.models import CodeModel, ProblemModel
 from django.contrib.auth.decorators import login_required
 import csv
+from datetime import datetime
 
 
 @login_required
@@ -55,9 +56,13 @@ def insert_codes_view(request):
     if request.method == "GET":
         csv_file_path = "codes.csv"
         with open(csv_file_path, "r", encoding="utf-8") as csv_file:
+            date_format = "%Y. %m. %d %p %I:%M:%S"
             csv_rows = csv.DictReader(csv_file)
             for row in csv_rows:
-                # timestamp = csv_rows["timestamp"]
+                timestamp = row["timestamp"]
+                date_string = timestamp.replace("오후", "PM").replace("오전", "AM")
+                date_object = datetime.strptime(date_string, date_format)
+                created_at = date_object.strftime("%Y-%m-%d %H:%M:%S")
                 name = row["name"]
                 track = row["track"]
                 if not UserModel.objects.filter(username=f"{name}_{track}").exists():
@@ -73,6 +78,7 @@ def insert_codes_view(request):
                     content=code_content,
                     author=author,
                     problem=problem,
+                    created_at=created_at,
                 )
         return redirect(reverse("code_feed:problems"))
     else:
