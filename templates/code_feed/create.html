@@ -1,18 +1,63 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
+{% block title %} Create {% endblock %} 
 
-{% block title %}
-Create
-{% endblock %}
+{% block navigation %} 
+{% include 'navigation.html' %} 
+{% endblock %} 
 
 {% block content %}
-
-<h1>codefeed 제출/수정</h1>
+<!-- <h1>codefeed 제출/수정</h1> -->
 <!-- action에 아무것도 넣지 않으면 현재 url로 post요청을 보냅니다. -->
-<!-- redirect와 render의 차이를 이해하기 -->
-<form method="post">
-    {% csrf_token %}
-    <textarea name="content" id="content">{{ code.content }}</textarea>
-    <input type="text" name="description" id="description" value="{{ code.description }}">
-    <button type="submit">제출/수정</button>
-</form>
+<!-- <form method="post">
+  {% csrf_token %}
+  <textarea name="content" id="content">{{ code.content }}</textarea>
+  <input
+    type="text"
+    name="description"
+    id="description"
+    value="{{ code.description }}"
+  />
+  <button type="submit">제출/수정</button>
+</form> -->
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <div class="card-group" style="width: 70vw; height: 75vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -46.5%);">
+            <div class="card">
+                <div class="card-header">
+                        <div class="row d-flex">
+                          <div class="col-2" style="border-right: 1px solid rgb(155, 155, 155);">
+                            # 1
+                          </div>
+                          <div class="col-10">
+                            짝수와 홀수
+                          </div>
+                        </div>
+                </div>
+              <div class="card-body">
+                <textarea style="height: 100%; width: 100%; background-color: #f0f0f0; border-radius: 5px; border: 0px;" name="content" id="content">{{ code.content }}</textarea>
+              </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="row d-flex">
+                      <div class="col-2">
+                        설명 :
+                      </div>
+                    </div>
+                </div>
+              <div class="card-body">
+                <textarea
+                    name="description"
+                    id="description"
+                    style="height: 100%; width:100%; background-color: #f0f0f0; border-radius: 5px; border: 0px;"
+                > {{ code.description }} </textarea>
+              </div>
+              <div class="card-footer bg-light-subtle" style="display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn btn-outline-secondary btn-sm">제출/수정</button>
+              </div>
+            </div>
+          </div>
+    </form>
+</div>
 {% endblock %}

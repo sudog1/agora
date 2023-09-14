@@ -5,30 +5,36 @@ Code Feed
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'code_feed:create' %}">코드 제출</a>
-<a href="/code_feed/update/4/">업데이트</a>
-<!-- <a href="?track=AI">AI보기</a>
-<a href="?track=Unity">Unity보기</a> -->
-<ul>
-    {% for feed in feeds %}
-        <li>
-            <div>문제{{ feed.problem.title }}</div>
-            <pre>
-                <code class='python'>{{ feed.content }}</code>
-            </pre>
-            <div>{{ feed.description }}</div>
-            <div>작성자: {{ feed.author }}</div>
-            <div>좋아요 수: {{ feed.likes__count }}</div>
-            <form action="/code_feed/likes/{{ feed.id }}/" method="post">
-                {% csrf_token %}
-                <button type="submit">좋아요</button>
-            </form>
-            <form action="/code_feed/bookmarks/{{ feed.id }}/" method="post">
-                {% csrf_token %}
-            <button type="submit">북마크</button>
-            </form>
-        </li>
-    {% endfor %}
-</ul>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col">
+            <a href="{% url 'code_feed:create' %}">코드 제출</a>
+            <!-- <a href="?track=AI">AI보기</a>
+            <a href="?track=Unity">Unity보기</a> -->
+            <ul>
+                {% for feed in feeds %}
+                <a href="{% url 'code_feed:detail' code_id=feed.id %}">
+                    <li>
+                        <div>문제{{ feed.problem.title }}</div>
+                        <pre>
+                            <code class='python'>{{ feed.content }}</code>
+                        </pre>
+                        <div>{{ feed.description }}</div>
+                        <div>작성자: {{ feed.author }}</div>
+                        <div>좋아요 수: {{ feed.likes__count }}</div>
+                    </li>
+                </a>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col">
+            
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}

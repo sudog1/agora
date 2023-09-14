@@ -44,21 +44,26 @@ def mypage_view(request, user_id):
             .annotate(Count("likes"))
             .order_by("-created_at")
         )
-        a = len(connection.queries)
-        print(f"실행된 쿼리 수: {a}")
-        for feed in feeds:
-            print(feed.author)
-            print(feed.problem.title)
-        b = len(connection.queries)
-        print(f"실행된 쿼리 수: {b}")
+        # a = len(connection.queries)
+        # print(f"실행된 쿼리 수: {a}")
+        # for feed in feeds:
+        #     print(feed.author)
+        #     print(feed.problem.title)
+        # b = len(connection.queries)
+        # print(f"실행된 쿼리 수: {b}")
         cur_page = max(int(request.GET.get("page", "1")), 1)
 
         page_obj, page_range = paginate(feeds, cur_page)
+        bookmarked_codes = page_user.bookmarks.annotate(Count("likes")).order_by("-created_at")
+        # for bookmarked_code in bookmarked_codes:
+        #     print(bookmarked_code.author)
+        #     print(bookmarked_code.problem.title)
         context = {
             "user": user,
             "page_user": page_user,
             "feeds": page_obj,
             "page_range": page_range,
+            "bookmarked_codes": bookmarked_codes,
         }
         return render(request, "accounts/mypage.html", context)
     elif request.method == "POST":
