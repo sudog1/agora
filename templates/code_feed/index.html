@@ -21,9 +21,8 @@ Main page
                         <div class="card" style="margin-top: 20px; margin-bottom: 10px;">
                             <div class="card-body">
                                 <a href="{% url 'code_feed:detail' code_id=feed.id %}" style="text-decoration: none;">
-                                    <div class="">{{feed.author}}</div>
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item"><b>#{{feed.problem.number}}. {{ feed.problem.title }}</b></li>
+                                        <li class="list-group-item"><b>{{feed.author}} - #{{feed.problem.number}}. {{ feed.problem.title }}</b></li>
                                         <pre>
                                             <code class="{{ lang }}">{{ feed.content }}</code>
                                         </pre>

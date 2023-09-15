@@ -122,15 +122,12 @@ def logout_view(request):
         return HttpResponseNotAllowed(["POST"])
 
 
+@login_required
 def members_view(request):
     if request.method == "GET":
         members = (
             UserModel.objects.filter(track=request.user.track)
-            .values(
-                "id",
-                "username",
-                "score",
-            )
+            .values("id", "username", "score", "track")
             .order_by("-username")
         )
         top_rankers = UserModel.objects.filter(track=request.user.track).order_by(

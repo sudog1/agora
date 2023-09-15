@@ -14,7 +14,7 @@ My Page
             <div name="profile_section" class="col-md-4" style="margin-top: 30px;">
                 <form class="form-area" method="post" enctype="multipart/form-data" id="profileForm">
                     {% csrf_token %}
-                    <span id="image_input" style="display: none;">
+                    <span id="imgInput" style="display: none;">
                         <div style="display: flex; justify-content: center; align-items: center;">
                             {# enctype을 "multipart/form-data"로 변경하여 파일 업로드를 지원함을 명시 #}
                             <label for="profile_image" class="btn btn-outline-secondary">이미지 업로드</label>
@@ -28,7 +28,7 @@ My Page
                     <div class="d-flex justify-content-center align-items-center">
                         <img id="preview_image" src="#" alt="프로필 이미지 미리보기" style="display: none; width: 200px; height: 200px; object-fit: cover;" class="img-fluid rounded-circle">
                         {% if page_user.profile_image %}
-                            <img id="original_image" src="{{ user.profile_image.url }}" alt="프로필 이미지" style="display: block; width: 200px; height: 200px; object-fit: cover;" class="img-fluid rounded-circle">
+                            <img id="original_image" src="{{ page_user.profile_image.url }}" alt="프로필 이미지" style="display: block; width: 200px; height: 200px; object-fit: cover;" class="img-fluid rounded-circle">
                         {% else %}
                             <span>No Image File</span>
                         {% endif %}
@@ -41,14 +41,11 @@ My Page
                     email : <span id="emailSpan">{{ page_user.email }}</span> 
                     <input type="hidden" value="{{ page_user.email }}" id="email" name="email" style="width: 100%;">
                     <br>
-                    {% if page_user.github_address %}
-                        github :
-                        <span id="githubSpan">
-                            <a href="{{ user.github_address }}">{{ page_user.github_address }}</a>
-                        </span>
-                    {% else %}
-                        <span>No github address</span>
-                    {% endif %}
+                    github :
+                    <span id="githubSpan">
+                        <a href="{{ page_user.github_address }}">{{ page_user.github_address }}</a>
+                    </span>
+                    
                     <input type="hidden" value="{{ page_user.github_address }}" id="github_address" name="github_address" style="width: 100%;">
                     <hr>
                     <span id="edit_profile_complete" style="display: none; justify-content: center; align-items: center;">
@@ -58,7 +55,7 @@ My Page
                 </form>
                 <div class="d-flex justify-content-center align-items-center">
                     {% if user == page_user %}
-                    <button id="editProfileBtn" class="btn btn-outline-secondary">프로필 수정하기</button>
+                    <button id="editProfileBtn" class="btn btn-outline-secondary" style="margin-top: 5px;">프로필 수정하기</button>
                     {% endif %}
                 </div>
             </div>
@@ -168,7 +165,7 @@ My Page
                 var emailSpan = document.getElementById("emailSpan");
                 var githubInput = document.getElementById("github_address");
                 var githubSpan = document.getElementById("githubSpan");
-                var image_input = document.getElementById("image_input");
+                var imageInput = document.getElementById("imgInput");
                 var edit_profile_complete = document.getElementById("edit_profile_complete");
                 var editProfileBtn = document.getElementById("editProfileBtn");
 
@@ -176,7 +173,7 @@ My Page
                 emailSpan.style.display = "none";
                 githubInput.type = "text";
                 githubSpan.style.display = "none";
-                image_input.style.display = "block";
+                imgInput.style.display = "block";
                 edit_profile_complete.style.display = "flex";
                 editProfileBtn.style.display = "none";
 

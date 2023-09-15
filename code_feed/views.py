@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.core.paginator import Paginator
-from config.settings import PAGE_RANGE, PER_PAGE
+from config.settings import LANG, PAGE_RANGE, PER_PAGE
 from django.db import connection
 from accounts.models import UserModel
 
@@ -44,19 +44,17 @@ def index_view(request):
         #     print(feed.author.username)
         # a = len(connection.queries)
         # print(f"실행된 쿼리 수: {a}")
+
         cur_page = max(int(request.GET.get("page", "1")), 1)
         page_obj, page_range = paginate(feeds, cur_page)
 
         top_rankers = UserModel.objects.filter(track=user.track).order_by("-score")[:10]
-        if user.track == "AI":
-            lang = "python"
-        else:
-            lang = "java"
+
         context = {
             "feeds": page_obj,
             "page_range": page_range,
             "top_rankers": top_rankers,
-            "lang": lang,
+            "lang": LANG[user.track],
         }
         return render(request, "code_feed/index.html", context)
     else:
@@ -65,12 +63,14 @@ def index_view(request):
 
 @login_required
 def detail_view(request, code_id):
-    code = CodeModel.objects.get(id=code_id)
+    code = (
+        CodeModel.objects.select_related("problem")
+        .prefetch_related("likes", "bookmarks")
+        .annotate(Count("likes"))
+        .get(id=code_id)
+    )
     comments = code.comments.order_by("-created_at")
-    context = {
-        "code": code,
-        "comments": comments,
-    }
+    context = {"code": code, "comments": comments, "lang": LANG[request.user.track]}
     return render(request, "code_feed/detail.html", context)
 
 
@@ -141,7 +141,7 @@ def delete_view(request, code_id):
 @login_required
 def likes_view(request, code_id):
     if request.method == "POST":
-        code = get_object_or_404(CodeModel, id=code_id)
+        code = CodeModel.objects.select_related("author").get(id=code_id)
         if request.user != code.author:
             if request.user in code.likes.all():
                 code.likes.remove(request.user)
@@ -157,7 +157,7 @@ def likes_view(request, code_id):
 @login_required
 def bookmarks_view(request, code_id):
     if request.method == "POST":
-        code = get_object_or_404(CodeModel, id=code_id)
+        code = CodeModel.objects.select_related("author").get(id=code_id)
         if request.user != code.author:
             if request.user in code.bookmarks.all():
                 code.bookmarks.remove(request.user)
@@ -170,8 +170,11 @@ def bookmarks_view(request, code_id):
         return redirect(reverse("code_feed:detail", args=[code_id]))
 
 
+@login_required
 def problems_view(request):
     if request.method == "GET":
+        user = request.user
+        solved_problems = user.solved.all()
         problems = ProblemModel.objects.values_list("number", "title", "link", "level")
         top_rankers = UserModel.objects.filter(track=request.user.track).order_by(
             "-score"
@@ -188,7 +191,11 @@ def problems_view(request):
         return render(
             request,
             "code_feed/problems.html",
-            {"problems": problems, "top_rankers": top_rankers},
+            {
+                "problems": problems,
+                "solved": solved_problems,
+                "top_rankers": top_rankers,
+            },
         )
     else:
         return HttpResponseNotAllowed(["GET"])

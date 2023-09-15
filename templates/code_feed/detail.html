@@ -9,39 +9,81 @@ detail
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col">
-        {% if user == code.author %}
-        <a href="{% url 'code_feed:update' code.id %}">업데이트</a>
-        {% endif %}
-        <div>
-            <div>
-                <form class="form-area" method="post" enctype="multipart/form-data">
-                    {% if page_user.profile_image %}
-                        <img src="{{ page_user.profile_image.url }}" alt="프로필 이미지">
-                    {% else %}
-                        <span>No Image File</span>
-                    {% endif %}
-                </form>
+<div class="container-lg">
+    <div class="row">
+        <div class="card-group">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row d-flex">
+                        <div class="col-3" style="border-right: 1px solid rgb(155, 155, 155);">
+                            {{ code.author }}
+                        </div>
+                        <div class="col-8">
+                        {{ code.problem.number }} - {{ code.problem.title }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <pre style="height: 100%; width: 100%; background-color: #f0f0f0; border-radius: 5px; border: 0px;">
+                        <code class="{{ lang }}">{{ code.content }}</code>
+                    </pre>
+                </div>
             </div>
-            <div>작성자: {{ code.author }}</div>
-            <div>문제: {{ code.problem.title }}</div>  
+            <div class="card">
+                <div class="card-header">
+                    <div class="row d-flex">
+                      <div class="col-2">
+                        설명 :
+                      </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div
+                        name="description"
+                        id="description"
+                        style="height: 100%; width:100%; background-color: #f0f0f0; border-radius: 5px; border: 0px;"
+                    > {{ code.description }} </div>
+                </div>
+                {% if user == code.author %}
+                <div class="card-footer bg-light-subtle" style="display: flex; justify-content: flex-start;">
+                    <a href="{% url 'code_feed:update' code.id %}">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">업데이트</button>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
         </div>
-        <pre>
-            <code class="python">{{ code.content }}</div>
-        </pre>
-        <div>
-            <div>{{ code.description }}</div>
-            <div>좋아요 수: {{ code.likes.count }}</div>
+    </div>
+    {% if user != code.author %}
+    <div class="row">
+        <div class="btn-group">
             <form action="{% url 'code_feed:likes' code.id %}" method="post">
                 {% csrf_token %}
-                <button type="submit">좋아요</button>
+                    {% if user in code.likes.all %}
+                    <button type="submit" class="btn btn-primary">
+                        좋아요
+                    {% else %}
+                    <button type="submit" class="btn btn-outline-primary">
+                        좋아요
+                    {% endif %}
+                        <span class="badge rounded-pill bg-danger">{{code.likes__count}}</span>
+                    </button>
             </form>
             <form action="{% url 'code_feed:bookmarks' code.id %}" method="post">
                 {% csrf_token %}
-                <button type="submit">북마크</button>
+                {% if user in code.bookmarks.all %}
+                <button type="submit" class="btn btn-info">
+                    북마크
+                {% else %}
+                <button type="submit" class="btn btn-outline-info">
+                    북마크 
+                {% endif %}
+                </button>
             </form>
         </div>
+    </div>
+    {% endif %}
+    <div class="row">
         <h5 class="border-bottom my-3 py-2">{{ comments.count }}개의 댓글</h5>
         {% for comment in comments %}
         <a id="comment_{{ comment.id }}"></a>
@@ -58,7 +100,7 @@ detail
                 </div>
                 <div class="my-3 d-flex">
                     {% if user == comment.author %}
-                    <a class="btn btn-sm btn-primary" href="{% url 'code_feed:comments:update' code_id=code.id comment_id=comment.id %}">{{comment.id}}수정</a>
+                    <a class="btn btn-sm btn-primary" href="{% url 'code_feed:comments:update' code_id=code.id comment_id=comment.id %}">수정</a>
                     <form method="post" action="{% url 'code_feed:comments:delete' code_id=code.id comment_id=comment.id %}">
                         {% csrf_token %}
                         <button class="btn btn-danger btn-sm ml-1" type="submit">삭제</button>

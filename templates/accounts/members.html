@@ -26,7 +26,7 @@ Members
                 <tbody>
                     {% for member in members %}
                     <tr>
-                        <th scope="row"><a href="{% url 'accounts:mypage' member.id %}">{{ member.username }}</a></th>
+                        <td><a class="text-primary text-decoration-none" href="{% url 'accounts:mypage' member.id %}">{{ member.username }}</a></th>
                         <td>{{ member.track }}</td>
                         <td>{{ member.score }}</td>
                     </tr>

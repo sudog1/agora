@@ -135,3 +135,8 @@ LOGOUT_REDIRECT_URL = "/code_feed/"
 
 PER_PAGE = 10
 PAGE_RANGE = 5
+
+LANG = {
+    "AI": "python",
+    "Unity": "java",
+}
