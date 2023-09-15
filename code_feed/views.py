@@ -174,7 +174,7 @@ def bookmarks_view(request, code_id):
 def problems_view(request):
     if request.method == "GET":
         user = request.user
-        solved_problems = user.solved.all()
+        solved_problems = set(map(lambda x: x[0], user.solved.values_list("number")))
         problems = ProblemModel.objects.values_list("number", "title", "link", "level")
         top_rankers = UserModel.objects.filter(track=request.user.track).order_by(
             "-score"
@@ -193,7 +193,7 @@ def problems_view(request):
             "code_feed/problems.html",
             {
                 "problems": problems,
-                "solved": solved_problems,
+                "solved_problems": solved_problems,
                 "top_rankers": top_rankers,
             },
         )

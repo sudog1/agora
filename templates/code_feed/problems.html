@@ -28,8 +28,12 @@ Problems
                     {% for number, title, link, level, color in problems %}
                     <tr class="{{ color }}">
                         <th scope="row">{{ number }}</th>
-                        <td><a class="navbar-brand" href="{{ link }}" target="_blank">{{ title }}</a></td>
-                        <td><a class="navbar-brand" href="{% url 'code_feed:create' problem_id=number %}">제출하러 가기</a></td>
+                        <td><a class="text-primary text-decoration-none" href="{{ link }}" target="_blank">{{ title }}</a></td>
+                        {% if number in solved_problems %}
+                        <td><a href="{% url 'code_feed:create' problem_id=number %}"> <span class="badge text-bg-primary">수정</span></a></td>
+                        {% else %}
+                        <td><a href="{% url 'code_feed:create' problem_id=number %}"> <span class="badge text-bg-secondary">제출</span></a></td>
+                        {% endif %}
                         <td>{{ level }}</td>
                     </tr>
                     {% endfor %}
