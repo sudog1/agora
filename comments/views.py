@@ -25,7 +25,7 @@ def update_view(request, code_id, comment_id):
             return render(
                 request,
                 "code_feed/comment_form.html",
-                {"code_id": code_id, "comment": comment_id},
+                {"code_id": code_id, "comment": comment},
             )
         else:
             return redirect(reverse("code:detail", args=[code_id]))

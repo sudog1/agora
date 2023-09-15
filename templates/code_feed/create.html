@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="container">
-    <form method="post">
+    <form method="post" action="{% if code %}{% url 'code_feed:update' code.id %}{% else %}{% url 'code_feed:create' problem.id %}{% endif %}">
         {% csrf_token %}
         <div class="card-group" style="width: 70vw; height: 75vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -46.5%);">
             <div class="card">

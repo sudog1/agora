@@ -33,11 +33,17 @@ def index_view(request):
     if request.method == "GET":
         user = request.user
         feeds = (
-            CodeModel.objects.select_related("author", "problem")
-            .filter(author__track=user.track)
+            CodeModel.objects.filter(author__track=user.track)
+            .select_related("author", "problem")
             .annotate(Count("likes"))
             .order_by("-created_at")
         )
+        # a = len(connection.queries)
+        # print(f"실행된 쿼리 수: {a}")
+        # for feed in feeds:
+        #     print(feed.author.username)
+        # a = len(connection.queries)
+        # print(f"실행된 쿼리 수: {a}")
         cur_page = max(int(request.GET.get("page", "1")), 1)
         page_obj, page_range = paginate(feeds, cur_page)
 
@@ -72,7 +78,13 @@ def detail_view(request, code_id):
 def create_view(request, problem_id):
     if request.method == "GET":
         problem = get_object_or_404(ProblemModel, number=problem_id)
-        return render(request, "code_feed/create.html", {"problem": problem})
+        code = CodeModel.objects.filter(problem=problem_id, author=request.user.id)
+        context = {
+            "problem": problem,
+        }
+        if code.exists():
+            context["code"] = code[0]
+        return render(request, "code_feed/create.html", context)
     elif request.method == "POST":
         problem = get_object_or_404(ProblemModel, number=problem_id)
         user = request.user

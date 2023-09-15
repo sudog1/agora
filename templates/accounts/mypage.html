@@ -28,7 +28,7 @@ My Page
                     <div class="d-flex justify-content-center align-items-center">
                         <img id="preview_image" src="#" alt="프로필 이미지 미리보기" style="display: none; width: 200px; height: 200px; object-fit: cover;" class="img-fluid rounded-circle">
                         {% if page_user.profile_image %}
-                            <img id="original_image" src="{{ page_user.profile_image.url }}" alt="프로필 이미지" style="display: block; width: 200px; height: 200px; object-fit: cover;" class="img-fluid rounded-circle">
+                            <img id="original_image" src="{{ user.profile_image.url }}" alt="프로필 이미지" style="display: block; width: 200px; height: 200px; object-fit: cover;" class="img-fluid rounded-circle">
                         {% else %}
                             <span>No Image File</span>
                         {% endif %}
@@ -136,87 +136,88 @@ My Page
     {% block pagination %}
     {% include 'pagination.html' %}
     {% endblock %}
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // 이미지 미리보기 코드 추가
-    document.getElementById("profile_image").addEventListener("change", function (event) {
-        var input = event.target;
-        var previewImage = document.getElementById("preview_image");
 
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 이미지 미리보기 코드 추가
+            document.getElementById("profile_image").addEventListener("change", function (event) {
+                var input = event.target;
+                var previewImage = document.getElementById("preview_image");
+        
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+        
+                    reader.onload = function (e) {
+                        // 미리보기 이미지의 소스를 업데이트하고 보이도록 설정
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = "block";
 
-            reader.onload = function (e) {
-                // 미리보기 이미지의 소스를 업데이트하고 보이도록 설정
-                previewImage.src = e.target.result;
-                previewImage.style.display = "block";
-
-                var originalImage = document.getElementById("original_image");
-                if (originalImage) {
-                    originalImage.style.display = "none";
+                        var originalImage = document.getElementById("original_image");
+                        if (originalImage) {
+                            originalImage.style.display = "none";
+                        }
+                    };
+        
+                    // 파일을 읽기 시작
+                    reader.readAsDataURL(input.files[0]);
                 }
-            };
+            });
 
-            // 파일을 읽기 시작
-            reader.readAsDataURL(input.files[0]);
-        }
-    });
+            document.getElementById("editProfileBtn").addEventListener("click", function() {
+                var emailInput = document.getElementById("email");
+                var emailSpan = document.getElementById("emailSpan");
+                var githubInput = document.getElementById("github_address");
+                var githubSpan = document.getElementById("githubSpan");
+                var image_input = document.getElementById("image_input");
+                var edit_profile_complete = document.getElementById("edit_profile_complete");
+                var editProfileBtn = document.getElementById("editProfileBtn");
 
-    document.getElementById("editProfileBtn").addEventListener("click", function() {
-        var emailInput = document.getElementById("email");
-        var emailSpan = document.getElementById("emailSpan");
-        var githubInput = document.getElementById("github_address");
-        var githubSpan = document.getElementById("githubSpan");
-        var image_input = document.getElementById("image_input");
-        var edit_profile_complete = document.getElementById("edit_profile_complete");
-        var editProfileBtn = document.getElementById("editProfileBtn");
+                emailInput.type = "text";
+                emailSpan.style.display = "none";
+                githubInput.type = "text";
+                githubSpan.style.display = "none";
+                image_input.style.display = "block";
+                edit_profile_complete.style.display = "flex";
+                editProfileBtn.style.display = "none";
 
-        emailInput.type = "text";
-        emailSpan.style.display = "none";
-        githubInput.type = "text";
-        githubSpan.style.display = "none";
-        image_input.style.display = "block";
-        edit_profile_complete.style.display = "flex";
-        editProfileBtn.style.display = "none";
+            })
 
-    })
+            document.getElementById('deleteProfileImageBtn').addEventListener('click', function(event) {
+                event.preventDefault(); 
 
-    document.getElementById('deleteProfileImageBtn').addEventListener('click', function(event) {
-        event.preventDefault(); 
+                // 폼 요소를 가져옵니다.
+                var form = document.getElementById('profileForm');
+                
+                // "deleteProfileImage" 키와 "True" 값을 추가합니다.
+                var input = document.getElementById("profile_image_delete");
+                var comment = document.getElementById("profile_image_delete_comment");
+                var originalImage = document.getElementById("original_image");
+                var previewImage = document.getElementById("preview_image");
+                var deleteProfileImageBtn = document.getElementById('deleteProfileImageBtn');
 
-        // 폼 요소를 가져옵니다.
-        var form = document.getElementById('profileForm');
-        
-        // "deleteProfileImage" 키와 "True" 값을 추가합니다.
-        var input = document.getElementById("profile_image_delete");
-        var comment = document.getElementById("profile_image_delete_comment");
-        var originalImage = document.getElementById("original_image");
-        var previewImage = document.getElementById("preview_image");
-        var deleteProfileImageBtn = document.getElementById('deleteProfileImageBtn');
+                if (input.value === "True") {
+                    input.value = "False";
+                    comment.style.display = "none";
+                    originalImage.style.display = "block";
+                    if (previewImage) {
+                        previewImage.style.display = "block";
+                        originalImage.style.display = "none";
+                    }
+                    deleteProfileImageBtn.innerHTML = "프로필 사진 삭제"
+                } else {
+                    input.value = "True";
+                    comment.style.display = "block";
+                    originalImage.style.display = "none";
+                    previewImage.style.display = "none";
+                    deleteProfileImageBtn.innerHTML = "프로필 사진 삭제 취소"
+                }
+                
 
-        if (input.value === "True") {
-            input.value = "False";
-            comment.style.display = "none";
-            originalImage.style.display = "block";
-            if (previewImage) {
-                previewImage.style.display = "block";
-                originalImage.style.display = "none";
-            }
-            deleteProfileImageBtn.innerHTML = "프로필 사진 삭제"
-        } else {
-            input.value = "True";
-            comment.style.display = "block";
-            originalImage.style.display = "none";
-            previewImage.style.display = "none";
-            deleteProfileImageBtn.innerHTML = "프로필 사진 삭제 취소"
-        }
-        
+                form.appendChild(input);
+            });
+        });
 
-        form.appendChild(input);
-    });
-});
-
-function toggleMyCodeFeed() {
+        function toggleMyCodeFeed() {
     var myCodeFeed = document.getElementById("my_code_feed");
     var myCodeFeedBtn = document.getElementById("my_code_feed_btn");
     var mySolvedProbs = document.getElementById("my_solved_problems");
@@ -347,5 +348,5 @@ function restoreMyCodeFeedState() {
 window.addEventListener("load", restoreMyCodeFeedState);
 
 
-</script>
+    </script>
 {% endblock %}

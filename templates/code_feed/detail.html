@@ -58,7 +58,7 @@ detail
                 </div>
                 <div class="my-3 d-flex">
                     {% if user == comment.author %}
-                    <a class="btn btn-sm btn-primary" href="{% url 'code_feed:comments:update' code_id=code.id comment_id=comment.id %}">수정</a>
+                    <a class="btn btn-sm btn-primary" href="{% url 'code_feed:comments:update' code_id=code.id comment_id=comment.id %}">{{comment.id}}수정</a>
                     <form method="post" action="{% url 'code_feed:comments:delete' code_id=code.id comment_id=comment.id %}">
                         {% csrf_token %}
                         <button class="btn btn-danger btn-sm ml-1" type="submit">삭제</button>
