@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts",
     "code_feed",
+    "comments",
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,6 @@ AUTH_USER_MODEL = "accounts.UserModel"
 
 LOGIN_REDIRECT_URL = "/code_feed/"
 LOGOUT_REDIRECT_URL = "/code_feed/"
+
+PER_PAGE = 10
+PAGE_RANGE = 5
