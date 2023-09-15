@@ -16,7 +16,7 @@ def insert_members_view(request):
             csv_rows = csv.reader(csv_file)
             next(csv_rows)
             for name, track in csv_rows:
-                if UserModel.objects.filter(username=name).exists():
+                if UserModel.objects.filter(username=f"{name}_{track}").exists():
                     break
                 UserModel.objects.create_user(
                     username=f"{name}_{track}",
