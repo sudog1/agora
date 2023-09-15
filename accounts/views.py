@@ -1,4 +1,5 @@
 from django.db import connection
+from django.forms import ValidationError
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotAllowed
 from django.contrib.auth import get_user_model
@@ -21,13 +22,19 @@ def signup_view(request):
         }
         return render(request, "accounts/signup.html", context)
     elif request.method == "POST":
-        form = CustomUserCreationForm(request.POST, request.FILES)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            auth.login(request, user)
-            return redirect(LOGIN_REDIRECT_URL)
-        else:
-            return render(request, "accounts/signup.html", {"error": form.errors})
+            if user:
+                auth.login(request, user)
+                return redirect(LOGIN_REDIRECT_URL)
+            else:
+                form.add_error("username", "해당 사용자 이름은 이미 존재합니다.")
+        context = {
+            "form": form,
+            "errors": form.errors,
+        }
+        return render(request, "accounts/signup.html", context)
     else:
         # 허용된 api method에 대해서만 응답하고 그렇지 않은 경우 405에러를 발생시킵니다.
         return HttpResponseNotAllowed(["GET", "POST"])
@@ -44,20 +51,12 @@ def mypage_view(request, user_id):
             .annotate(Count("likes"))
             .order_by("-created_at")
         )
-        # a = len(connection.queries)
-        # print(f"실행된 쿼리 수: {a}")
-        # for feed in feeds:
-        #     print(feed.author)
-        #     print(feed.problem.title)
-        # b = len(connection.queries)
-        # print(f"실행된 쿼리 수: {b}")
         cur_page = max(int(request.GET.get("page", "1")), 1)
 
         page_obj, page_range = paginate(feeds, cur_page)
-        bookmarked_codes = page_user.bookmarks.annotate(Count("likes")).order_by("-created_at")
-        # for bookmarked_code in bookmarked_codes:
-        #     print(bookmarked_code.author)
-        #     print(bookmarked_code.problem.title)
+        bookmarked_codes = page_user.bookmarks.annotate(Count("likes")).order_by(
+            "-created_at"
+        )
         context = {
             "user": user,
             "page_user": page_user,
@@ -92,24 +91,19 @@ def mypage_view(request, user_id):
             "page_user": page_user,
             "feeds": feeds,
         }
-
         return redirect(f"/accounts/mypage/{user_id}")
-
     else:
         # 허용된 api method에 대해서만 응답하고 그렇지 않은 경우 405에러를 발생시킵니다.
         return HttpResponseNotAllowed(["GET", "POST"])
 
 
-# sign-in에서 login으로 변경했습니다.
 def login_view(request):
     if request.method == "GET":
         return render(request, "accounts/login.html")
     elif request.method == "POST":
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
-        auth_user = auth.authenticate(
-            request, username=username, password=password
-        )  # => 암호화 된 비밀번호와 사용자가 적은 비밀번호와 일치하는지 비교
+        auth_user = auth.authenticate(request, username=username, password=password)
         if auth_user:
             auth.login(request, auth_user)
             return redirect(LOGIN_REDIRECT_URL)
@@ -128,7 +122,19 @@ def logout_view(request):
         return HttpResponseNotAllowed(["POST"])
 
 
+@login_required
 def members_view(request):
     if request.method == "GET":
-        members = UserModel.objects.values("username", "score")
-        return render(request, "accounts/members.html", {"members": members})
+        members = (
+            UserModel.objects.filter(track=request.user.track)
+            .values("id", "username", "score", "track")
+            .order_by("-username")
+        )
+        top_rankers = UserModel.objects.filter(track=request.user.track).order_by(
+            "-score"
+        )[:10]
+        return render(
+            request,
+            "accounts/members.html",
+            {"members": members, "top_rankers": top_rankers},
+        )

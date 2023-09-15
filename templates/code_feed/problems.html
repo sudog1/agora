@@ -4,25 +4,39 @@
 Problems
 {% endblock %}
 
+{% block navigation %}
+{% include 'navigation.html' %}
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid">
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">번호</th>
-                <th scope="col">제목</th>
-                <th scope="col">레벨</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for number, title, link, level, color in problems %}
-            <tr class="{{ color }}">
-                <th scope="row">{{ number }}</th>
-                <td><a href="{{ link }}" target="_blank">{{ title }}</a></td>
-                <td>{{ level }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="row">
+        {% block profile %}
+        {% include 'profile.html' %}
+        {% endblock %}
+        <div class="col-md-6">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">번호</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">제출하기</th>
+                        <th scope="col">레벨</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for number, title, link, level, color in problems %}
+                    <tr class="{{ color }}">
+                        <th scope="row">{{ number }}</th>
+                        <td><a class="navbar-brand" href="{{ link }}" target="_blank">{{ title }}</a></td>
+                        <td><a class="navbar-brand" href="{% url 'code_feed:create' problem_id=number %}">제출하러 가기</a></td>
+                        <td>{{ level }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% block ranking %}
+        {% include 'ranking.html' %}
+        {% endblock %}
 {% endblock %}

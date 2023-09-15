@@ -6,31 +6,18 @@
 {% endblock %} 
 
 {% block content %}
-<!-- <h1>codefeed 제출/수정</h1> -->
-<!-- action에 아무것도 넣지 않으면 현재 url로 post요청을 보냅니다. -->
-<!-- <form method="post">
-  {% csrf_token %}
-  <textarea name="content" id="content">{{ code.content }}</textarea>
-  <input
-    type="text"
-    name="description"
-    id="description"
-    value="{{ code.description }}"
-  />
-  <button type="submit">제출/수정</button>
-</form> -->
 <div class="container">
-    <form method="post">
+    <form method="post" action="{% if code %}{% url 'code_feed:update' code.id %}{% else %}{% url 'code_feed:create' problem.id %}{% endif %}">
         {% csrf_token %}
         <div class="card-group" style="width: 70vw; height: 75vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -46.5%);">
             <div class="card">
                 <div class="card-header">
                         <div class="row d-flex">
                           <div class="col-2" style="border-right: 1px solid rgb(155, 155, 155);">
-                            # 1
+                            # {{ problem.number }}
                           </div>
                           <div class="col-10">
-                            짝수와 홀수
+                            {{ problem.title }}
                           </div>
                         </div>
                 </div>
